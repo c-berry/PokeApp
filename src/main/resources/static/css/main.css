@@ -1,7 +1,23 @@
+h1 {
+    text-align: center;
+    color: red;
+}
+
 #output-container {
 
 }
 
 .pokemon-card {
+    margin-top: 1.5em;
+    margin-left: 1em;
+    border-style: double;
+}
 
+.content {
+    text-align: center;
+}
+
+img {
+    height: 6em;
+    width: 6.5em;
 }
