@@ -44,9 +44,9 @@ const mapToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="pokemon-car
 
      <div class="content">${getName(pokemon)}</div>
      <div class="content"><img src="${getPic(pokemon)}" alt="pokemon"></div>
-<!--     <div class="content">Weight: ${pokemon.weight} lbs</div>-->
-<!--     <div class="content">Type: ${getTypes(pokemon)}</div>-->
-<!--     <div class="content">Abilities: ${getAbilities(pokemon)}</div>-->
+     <div class="content">Type: ${getTypes(pokemon)}</div>
+     <div class="content">Abilities: ${getAbilities(pokemon)}</div>
+     <div class="content">Weight: ${pokemon.weight} lbs</div>
       
       </div>`;
 

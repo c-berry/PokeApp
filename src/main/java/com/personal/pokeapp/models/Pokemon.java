@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "pokemon",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"apiId"}))
+        uniqueConstraints = @UniqueConstraint(columnNames = {"apiId", "name"}))
 public class Pokemon {
 
     @Id
@@ -48,6 +48,15 @@ public class Pokemon {
     private List<Ability> ability = new ArrayList<>();
 
     public Pokemon(){}
+
+    public Pokemon(long apiId, String name, int weight, int height, String sprite, String spriteShiny) {
+        this.apiId = apiId;
+        this.name = name;
+        this.weight = weight;
+        this.height = height;
+        this.sprite = sprite;
+        this.spriteShiny = spriteShiny;
+    }
 
     public Pokemon(long apiId, String name, int weight, int height, String sprite, String spriteShiny, List<Type> type, List<Ability> ability) {
         this.apiId = apiId;
@@ -114,5 +123,21 @@ public class Pokemon {
 
     public void setAbility(List<Ability> ability) {
         this.ability = ability;
+    }
+
+    public String getSprite() {
+        return sprite;
+    }
+
+    public void setSprite(String sprite) {
+        this.sprite = sprite;
+    }
+
+    public String getSpriteShiny() {
+        return spriteShiny;
+    }
+
+    public void setSpriteShiny(String spriteShiny) {
+        this.spriteShiny = spriteShiny;
     }
 }
