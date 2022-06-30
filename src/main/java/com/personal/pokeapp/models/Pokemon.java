@@ -1,4 +1,118 @@
 package com.personal.pokeapp.models;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "pokemon",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"apiId"}))
 public class Pokemon {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column
+    private long apiId;
+
+    @Column
+    private String name;
+
+    @Column
+    private int weight;
+
+    @Column
+    private int height;
+
+    @Column
+    private String sprite;
+
+    @Column
+    private String spriteShiny;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "pokemon_type",
+            joinColumns = {@JoinColumn(name = "pokemon_id")},
+            inverseJoinColumns = {@JoinColumn(name = "type_id")}
+    )
+    private List<Type> type = new ArrayList<>();
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "pokemon_ability",
+            joinColumns = {@JoinColumn(name = "pokemon_id")},
+            inverseJoinColumns = {@JoinColumn(name = "ability_id")}
+    )
+    private List<Ability> ability = new ArrayList<>();
+
+    public Pokemon(){}
+
+    public Pokemon(long apiId, String name, int weight, int height, String sprite, String spriteShiny, List<Type> type, List<Ability> ability) {
+        this.apiId = apiId;
+        this.name = name;
+        this.weight = weight;
+        this.height = height;
+        this.sprite = sprite;
+        this.spriteShiny = spriteShiny;
+        this.type = type;
+        this.ability = ability;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getApiId() {
+        return apiId;
+    }
+
+    public void setApiId(long apiId) {
+        this.apiId = apiId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public List<Type> getType() {
+        return type;
+    }
+
+    public void setType(List<Type> type) {
+        this.type = type;
+    }
+
+    public List<Ability> getAbility() {
+        return ability;
+    }
+
+    public void setAbility(List<Ability> ability) {
+        this.ability = ability;
+    }
 }

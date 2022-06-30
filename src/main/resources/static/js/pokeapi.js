@@ -13,31 +13,31 @@ $.get(url + '/charizard').done(function(data) {
 });
 
 //get all pokemon =>
-$.ajax('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0').done(function (data, status) {
-    console.log("AJAX call completed successfully!");
-    console.log("Request status: " + status);
-    console.log("Data returned from server:");
-    console.log(data);
-
-    //// loop thru all pokemon data =>
-    data.results.forEach(pokemon =>
-        // console.log(pokemon.url)
-        $.ajax('https://pokeapi.co/api/v2/pokemon/' + pokemon.name).done(function (pokemon, status) {
-
-            const output = mapToDiv(pokemon);
-            $('#output-container').append(output);
-
-            console.log(pokemon);
-        })
-    );
-
-}).fail(function (status, error) {
-    alert("There was an error! Check the console for details");
-    console.log("Response status: " + status);
-    console.log("Error object: " + error)
-}).always(function () {
-    // alert("Gotta catch 'em all!");
-});
+// $.ajax('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0').done(function (data, status) {
+//     console.log("AJAX call completed successfully!");
+//     console.log("Request status: " + status);
+//     console.log("Data returned from server:");
+//     console.log(data);
+//
+//     //// loop thru all pokemon data =>
+//     data.results.forEach(pokemon =>
+//         // console.log(pokemon.url)
+//         $.ajax('https://pokeapi.co/api/v2/pokemon/' + pokemon.name).done(function (pokemon, status) {
+//
+//             const output = mapToDiv(pokemon);
+//             $('#output-container').append(output);
+//
+//             console.log(pokemon);
+//         })
+//     );
+//
+// }).fail(function (status, error) {
+//     alert("There was an error! Check the console for details");
+//     console.log("Response status: " + status);
+//     console.log("Error object: " + error)
+// }).always(function () {
+//     // alert("Gotta catch 'em all!");
+// });
 
 //output pokemon data to html view =>
 const mapToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="pokemon-card px-2 py-1">
