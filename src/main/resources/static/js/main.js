@@ -12,6 +12,18 @@ $.get(url + '/charizard').done(function(data) {
     $('#output-container').html(output);
 });
 
+//get data on 1 pokemon using fetch =>
+function getOnePokemon(){
+    fetch(url + '/charizard')
+        .then((response) => response.json())
+        .then((data) => {
+
+            console.log(data);
+            const output = mapToDiv(data);
+            $('#output-container').html(output);
+        });
+}
+
 //get all pokemon =>
 $.ajax(url + '?limit=100000&offset=0').done(function (data, status) {
     console.log("AJAX call completed successfully!");
@@ -31,8 +43,6 @@ $.ajax(url + '?limit=100000&offset=0').done(function (data, status) {
         })
     );
 
-
-
 }).fail(function (status, error) {
     alert("There was an error! Check the console for details");
     console.log("Response status: " + status);
@@ -41,13 +51,8 @@ $.ajax(url + '?limit=100000&offset=0').done(function (data, status) {
     // alert("Gotta catch 'em all!");
 });
 
-// function sortPokemon(pokemon) {
-//     let
-// }
-
 //output pokemon data to html view =>
 const mapToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
-
      <div class="content">${getName(pokemon)}</div>
      <div class="content"><img src="${getPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
      <div class="content">Type: ${getTypes(pokemon)}</div>
@@ -138,4 +143,3 @@ function convertHeight(pokemon) {
         return inches + " inches";
     }
 }
-
