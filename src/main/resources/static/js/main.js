@@ -40,10 +40,10 @@ $.get(url + '/charizard').done(function(data) {
 // });
 
 //output pokemon data to html view =>
-const mapToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="pokemon-card px-2 py-1">
+const mapToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
 
      <div class="content">${getName(pokemon)}</div>
-     <div class="content"><img src="${getPic(pokemon)}" alt="pokemon"></div>
+     <div class="content"><img src="${getPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
      <div class="content">Type: ${getTypes(pokemon)}</div>
      <div class="content">Abilities: ${getAbilities(pokemon)}</div>
      <div class="content">Weight: ${pokemon.weight} lbs</div>

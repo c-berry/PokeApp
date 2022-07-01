@@ -7,17 +7,29 @@ h1 {
 
 }
 
-.pokemon-card {
+.content {
+    text-align: center;
+}
+
+.main-pokemon-card {
     margin-top: 1.5em;
     margin-left: 1em;
     border-style: double;
 }
 
-.content {
-    text-align: center;
+.pokemon-card {
+    margin-top: 1.5em;
+    margin-left: 1em;
+    margin-right: 1em;
+    border-style: double;
 }
 
-img {
+.main-pokemon-img {
     height: 6em;
     width: 6.5em;
+}
+
+.pokemon-img {
+    height: 15em;
+    width: 16.5em;
 }
