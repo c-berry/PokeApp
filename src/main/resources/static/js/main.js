@@ -13,31 +13,37 @@ $.get(url + '/charizard').done(function(data) {
 });
 
 //get all pokemon =>
-// $.ajax('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0').done(function (data, status) {
-//     console.log("AJAX call completed successfully!");
-//     console.log("Request status: " + status);
-//     console.log("Data returned from server:");
-//     console.log(data);
-//
-//     //// loop thru all pokemon data =>
-//     data.results.forEach(pokemon =>
-//         // console.log(pokemon.url)
-//         $.ajax('https://pokeapi.co/api/v2/pokemon/' + pokemon.name).done(function (pokemon, status) {
-//
-//             const output = mapToDiv(pokemon);
-//             $('#output-container').append(output);
-//
-//             console.log(pokemon);
-//         })
-//     );
-//
-// }).fail(function (status, error) {
-//     alert("There was an error! Check the console for details");
-//     console.log("Response status: " + status);
-//     console.log("Error object: " + error)
-// }).always(function () {
-//     // alert("Gotta catch 'em all!");
-// });
+$.ajax(url + '?limit=100000&offset=0').done(function (data, status) {
+    console.log("AJAX call completed successfully!");
+    console.log("Request status: " + status);
+    console.log("Data returned from server:");
+    console.log(data);
+
+    //// loop thru all pokemon data =>
+    data.results.forEach(pokemon =>
+        // console.log(pokemon.url)
+        $.ajax('https://pokeapi.co/api/v2/pokemon/' + pokemon.name).done(function (pokemon, status) {
+
+            const output = mapToDiv(pokemon);
+            $('#output-container').append(output);
+
+            console.log(pokemon);
+        })
+    );
+
+
+
+}).fail(function (status, error) {
+    alert("There was an error! Check the console for details");
+    console.log("Response status: " + status);
+    console.log("Error object: " + error)
+}).always(function () {
+    // alert("Gotta catch 'em all!");
+});
+
+// function sortPokemon(pokemon) {
+//     let
+// }
 
 //output pokemon data to html view =>
 const mapToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
@@ -45,8 +51,9 @@ const mapToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokemo
      <div class="content">${getName(pokemon)}</div>
      <div class="content"><img src="${getPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
      <div class="content">Type: ${getTypes(pokemon)}</div>
-     <div class="content">Abilities: ${getAbilities(pokemon)}</div>
-     <div class="content">Weight: ${pokemon.weight} lbs</div>
+     <div class="content">Ability: ${getAbilities(pokemon)}</div>
+     <div class="content">Height: ${convertHeight(pokemon)}</div>
+     <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>   
       
       </div>`;
 
@@ -69,7 +76,7 @@ function getPic(pokemon) {
     }
 }
 
-//get typing of pokemon since some have multiple =>
+//get typing of pokemon since only some have two =>
 function getTypes(pokemon) {
     if (pokemon.types.length > 1){
         return pokemon.types[0].type.name + "/" + pokemon.types[1].type.name;
@@ -78,7 +85,7 @@ function getTypes(pokemon) {
     }
 }
 
-//get abilities of a pokemon =>
+//get abilities of a pokemon based on size of array =>
 function getAbilities(pokemon) {
     if (pokemon.abilities.length === 4) {
         return pokemon.abilities[0].ability.name
@@ -98,3 +105,37 @@ function getAbilities(pokemon) {
         return "N/A";
     }
 }
+
+function convertWeight(pokemon) {
+    let hectogramToPound = pokemon.weight * 0.220462;
+    return hectogramToPound.toFixed(0);
+}
+
+function convertHeight(pokemon) {
+    let decimeterToInch = pokemon.height * 3.93701;
+
+    let totalFeet = decimeterToInch * 0.083333;
+    let feetArr = totalFeet.toString().split(".");
+    let feet = feetArr[0];
+
+    let inches2 = "0." + feetArr[1];
+    let inchesLeftover = parseFloat(inches2) * 12;
+
+    if (inchesLeftover >= 10 && feet >= 1) {
+        let inches = inchesLeftover.toString().substring(0, 2);
+        return feet + "\'" + inches + "\"";
+    }
+    if (inchesLeftover < 10 && feet >= 1) {
+        let inches = inchesLeftover.toString().substring(0, 1);
+        return feet + "\'" + inches + "\"";
+    }
+    if (inchesLeftover >= 10 && feet < 1) {
+        let inches = inchesLeftover.toString().substring(0, 2);
+        return inches + " inches";
+    }
+    if (inchesLeftover < 10 && feet < 1) {
+        let inches = inchesLeftover.toString().substring(0, 1);
+        return inches + " inches";
+    }
+}
+
