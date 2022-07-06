@@ -2,73 +2,113 @@
 
 const url = "https://pokeapi.co/api/v2/pokemon";
 
-//// get data on 1 pokemon =>
-$.get(url + '/charizard').done(function(data) {
-    console.log(data);
-    console.log(data.id)
-    console.log(data.name)
+// get data on 1 pokemon =>
+function getCharizard(){
+    $.get(url + '/charizard').done(function(data) {
+        console.log(data);
+        console.log(data.id);
+        console.log(data.name);
+        console.log(data.abilities);
 
-    const output = mapToDiv(data);
-    $('#output-container').html(output);
-});
+        const output = dataToDiv(data);
+        $('#output-container').html(output);
+    });
+}
+// getCharizard();
 
 //get data on 1 pokemon using fetch =>
 function getOnePokemon(){
-    fetch(url + '/charizard')
+    fetch(url + '/pikachu')
         .then((response) => response.json())
         .then((data) => {
 
             console.log(data);
-            const output = mapToDiv(data);
+            const output = dataToDiv(data);
             $('#output-container').html(output);
         });
 }
+// getOnePokemon();
 
 //get all pokemon =>
-$.ajax(url + '?limit=100000&offset=0').done(function (data, status) {
-    console.log("AJAX call completed successfully!");
-    console.log("Request status: " + status);
-    console.log("Data returned from server:");
-    console.log(data);
+function getAllPokemon(){
+    $.ajax(url + '?limit=10000&offset=0').done(function (data, status) {
+        console.log("AJAX call completed successfully!");
+        console.log("Request status: " + status);
+        console.log("Data returned from server:");
+        console.log(data);
 
-    //// loop thru all pokemon data =>
-    data.results.forEach(pokemon =>
-        // console.log(pokemon.url)
-        $.ajax('https://pokeapi.co/api/v2/pokemon/' + pokemon.name).done(function (pokemon, status) {
+        //// loop thru all pokemon data =>
+        data.results.forEach(pokemon =>
+            // console.log(pokemon.url)
+            $.ajax('https://pokeapi.co/api/v2/pokemon/' + pokemon.name).done(function (pokemon, status) {
 
-            const output = mapToDiv(pokemon);
-            $('#output-container').append(output);
+                const output = dataToDiv(pokemon);
+                $('#output-container').append(output);
 
-            console.log(pokemon);
-        })
-    );
+                console.log(pokemon);
+            })
+        );
 
-}).fail(function (status, error) {
-    alert("There was an error! Check the console for details");
-    console.log("Response status: " + status);
-    console.log("Error object: " + error)
-}).always(function () {
-    // alert("Gotta catch 'em all!");
-});
+    }).fail(function (status, error) {
+        alert("There was an error! Check the console for details");
+        console.log("Response status: " + status);
+        console.log("Error object: " + error)
+    }).always(function () {
+        // alert("Gotta catch 'em all!");
+    });
+
+}
+// getAllPokemon();
 
 //output pokemon data to html view =>
-const mapToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
+const dataToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
      <div class="content">${getName(pokemon)}</div>
      <div class="content"><img src="${getPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
      <div class="content">Type: ${getTypes(pokemon)}</div>
      <div class="content">Ability: ${getAbilities(pokemon)}</div>
      <div class="content">Height: ${convertHeight(pokemon)}</div>
-     <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>   
-      
+     <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>  
+     
+     <input type="hidden" id="name" value="${pokemon.name}">
+     <button class="view content" onclick="viewPokemon()" >View</button>
+     
       </div>`;
 
-//remove hyphens from names =>
+//redirect to singular view =>
+function viewPokemon(){
+    $(".view").on("click", function () {
+        let name = $("#name").val();
+        window.location.href = "/pokemon/" + name;
+    });
+}
+
+// //redirect to singular view =>
+// function viewPokemon(){
+//     $(this).on("click", function () {
+//         let name = $("#name").val();
+//         window.location.href = "/pokemon/" + name;
+//     });
+// }
+
+const dataToForm = (pokemon) => `<form id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
+     <input type="hidden">${pokemon.name}</div>
+     <input type="hidden"><img src="${getPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
+     <input type="hidden">Type: ${getTypes(pokemon)}</div>
+     <input type="hidden">Ability: ${pokemon.abilities}</div>
+     <input type="hidden">Height: ${pokemon.height}</div>
+     <input type="hidden" id="${pokemon.name}"/>
+      
+      </form>`;
+
+
+
+//remove hyphens from names and cap first letter =>
 function getName(pokemon) {
     if (pokemon.name.includes("-")) {
         let hyphen = pokemon.name.indexOf("-");
-        return pokemon.name.substring(0, hyphen);
+        return pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(0, hyphen);
     } else {
-        return pokemon.name;
+        return pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
     }
 }
 
@@ -143,3 +183,17 @@ function convertHeight(pokemon) {
         return inches + " inches";
     }
 }
+
+
+//does not work with loop:
+// fetch(url + '/charizard')
+//     .then(response => response.json())
+//     .then(response =>
+//
+//         // response.results.forEach(response => {
+//         //     $('#output-container').append(dataToDiv(response))
+//         // })
+//         $('#output-container').html(dataToDiv(response))
+//
+//     )
+//     .catch(err => console.error(err));
