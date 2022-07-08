@@ -18,20 +18,20 @@ function getCharizard(){
 
 //get data on 1 pokemon using fetch =>
 function getOnePokemon(){
-    fetch(url + '/pikachu')
+    fetch('https://pokeapi.co/api/v2/pokemon/')
         .then((response) => response.json())
         .then((data) => {
 
             console.log(data);
-            const output = dataToDiv(data);
-            $('#output-container').html(output);
+            // const output = dataToDiv(data);
+            // $('#output-container').html(output);
         });
 }
 // getOnePokemon();
 
 //get all pokemon =>
 function getAllPokemon(){
-    $.ajax(url + '?limit=10000&offset=0').done(function (data, status) {
+    $.ajax(url + '?limit=150&offset=0').done(function (data, status) {
         console.log("AJAX call completed successfully!");
         console.log("Request status: " + status);
         console.log("Data returned from server:");
@@ -60,6 +60,7 @@ function getAllPokemon(){
 }
 // getAllPokemon();
 
+
 //output pokemon data to html view =>
 const dataToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
      <div class="content">${getName(pokemon)}</div>
@@ -70,25 +71,38 @@ const dataToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokem
      <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>  
      
      <input type="hidden" id="name" value="${pokemon.name}">
-     <button class="view content" onclick="viewPokemon()" >View</button>
+     <button class="view content" data-id="${pokemon.name}" >View</button>
      
       </div>`;
 
 //redirect to singular view =>
-function viewPokemon(){
-    $(".view").on("click", function () {
-        let name = $("#name").val();
-        window.location.href = "/pokemon/" + name;
-    });
-}
-
-// //redirect to singular view =>
 // function viewPokemon(){
-//     $(this).on("click", function () {
+//     $(".view").on("click", function () {
 //         let name = $("#name").val();
 //         window.location.href = "/pokemon/" + name;
 //     });
 // }
+
+function viewPokemon2(){
+
+}
+
+function viewPokemon3(name){
+    window.location.href = "/pokemon/" + name;
+}
+
+// $(".view").click(function (e) {
+//
+//     alert("yo!");
+//     const clickedId = e.target.dataset.id;
+//     console.log(clickedId);
+// });
+
+document.querySelector('.view').addEventListener('click', function (e) {
+    alert("yo!");
+    const clickedId = e.target.dataset.id;
+    console.log(clickedId);
+});
 
 const dataToForm = (pokemon) => `<form id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
      <input type="hidden">${pokemon.name}</div>
