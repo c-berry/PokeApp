@@ -27,9 +27,15 @@ h1 {
 .main-pokemon-img {
     height: 6em;
     width: 6.5em;
+    cursor: pointer;
 }
 
 .pokemon-img {
     height: 15em;
     width: 16.5em;
+}
+
+.view-btn {
+    /*display: flex;*/
+    /*justify-content: center;*/
 }

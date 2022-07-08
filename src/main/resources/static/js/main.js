@@ -3,35 +3,44 @@
 const url = "https://pokeapi.co/api/v2/pokemon";
 
 // get data on 1 pokemon =>
-function getCharizard(){
-    $.get(url + '/charizard').done(function(data) {
+function getPokemon(pokemon){
+    $.get(url + '/' + pokemon).done(function(data) {
         console.log(data);
         console.log(data.id);
         console.log(data.name);
         console.log(data.abilities);
 
-        const output = dataToDiv(data);
-        $('#output-container').html(output);
+        $('#output-container').append(dataToDiv(data));
     });
 }
 // getCharizard();
 
-//get data on 1 pokemon using fetch =>
-function getOnePokemon(){
-    fetch('https://pokeapi.co/api/v2/pokemon/')
+function searchPokemon(pokemon){
+    $.ajax(url + '/' + pokemon).done(function (data, status) {
+        console.log("AJAX call completed successfully!");
+        console.log("Request status: " + status);
+        console.log("Data returned from server:");
+        console.log(data);
+
+        $('#output-container').html(dataToDiv(data));
+    });
+}
+
+//get data on 1 pokemon using fetch but there are issues when looping due to promises =>
+function fetchOnePokemon(pokemon){
+    fetch('https://pokeapi.co/api/v2/pokemon/' + pokemon)
         .then((response) => response.json())
         .then((data) => {
 
             console.log(data);
-            // const output = dataToDiv(data);
-            // $('#output-container').html(output);
+            $('#output-container').html(dataToDiv(data));
         });
 }
-// getOnePokemon();
+// fetchOnePokemon();
 
 //get all pokemon =>
 function getAllPokemon(){
-    $.ajax(url + '?limit=150&offset=0').done(function (data, status) {
+    $.ajax(url + '?limit=2000&offset=0').done(function (data, status) {
         console.log("AJAX call completed successfully!");
         console.log("Request status: " + status);
         console.log("Data returned from server:");
@@ -40,11 +49,9 @@ function getAllPokemon(){
         //// loop thru all pokemon data =>
         data.results.forEach(pokemon =>
             // console.log(pokemon.url)
-            $.ajax('https://pokeapi.co/api/v2/pokemon/' + pokemon.name).done(function (pokemon, status) {
+            $.ajax('https://pokeapi.co/api/v2/pokemon/' + pokemon.name).done(function (pokemon) {
 
-                const output = dataToDiv(pokemon);
-                $('#output-container').append(output);
-
+                $('#output-container').append(dataToDiv(pokemon));
                 console.log(pokemon);
             })
         );
@@ -60,50 +67,63 @@ function getAllPokemon(){
 }
 // getAllPokemon();
 
-
-//output pokemon data to html view =>
-const dataToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
-     <div class="content">${getName(pokemon)}</div>
-     <div class="content"><img src="${getPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
-     <div class="content">Type: ${getTypes(pokemon)}</div>
-     <div class="content">Ability: ${getAbilities(pokemon)}</div>
-     <div class="content">Height: ${convertHeight(pokemon)}</div>
-     <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>  
-     
-     <input type="hidden" id="name" value="${pokemon.name}">
-     <button class="view content" data-id="${pokemon.name}" >View</button>
-     
-      </div>`;
-
-//redirect to singular view =>
-// function viewPokemon(){
-//     $(".view").on("click", function () {
-//         let name = $("#name").val();
-//         window.location.href = "/pokemon/" + name;
-//     });
-// }
-
-function viewPokemon2(){
-
+//clear output container =>
+function clearPokemon() {
+    $("#output-container").html("")
 }
 
-function viewPokemon3(name){
+//search bar function on click =>
+$("#search-btn").click(function (e) {
+    e.preventDefault();
+    clearPokemon();
+    const pokemon = $("#search-input").val()
+    searchPokemon(pokemon);
+});
+
+//view all pokemon on click =>
+$('#viewAllPokemon').click(function () {
+    clearPokemon();
+    getAllPokemon();
+});
+
+//redirect to singular view in click=>
+function viewPokemon(name){
+    // alert(name);
     window.location.href = "/pokemon/" + name;
 }
 
-// $(".view").click(function (e) {
-//
-//     alert("yo!");
-//     const clickedId = e.target.dataset.id;
-//     console.log(clickedId);
-// });
-
-document.querySelector('.view').addEventListener('click', function (e) {
-    alert("yo!");
-    const clickedId = e.target.dataset.id;
-    console.log(clickedId);
+//get all pokemon on click
+$('#view-all-pokemon').click(function () {
+    clearPokemon();
+    getAllPokemon();
+    // getAllPokemon2();
 });
 
+//loop through pokemon by id =>
+function getAllPokemon2() {
+    for (let i = 0; i < 1000; i++) {
+        getPokemon(i);
+    }
+}
+
+//output pokemon data to html view =>
+const dataToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1" onclick="viewPokemon('${pokemon.name}')">
+     <div class="content pokemon-name">${getName(pokemon)}</div>
+     <div class="content">#${pokemon.id}</div>
+     <div class="content"><img src="${getPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
+     <div class="content">Type: ${getTypes(pokemon.types)}</div>
+     <div class="content">Ability: ${getAbilities(pokemon.abilities)}</div>
+     <div class="content">Height: ${convertHeight(pokemon)}</div>
+     <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>  
+     
+<!--     <input type="hidden" id="name" value="${pokemon.name}">-->
+<!--     <div class="content">
+        <button class="view-btn btn-primary" onclick="viewPokemon('${pokemon.name}')">View</button>
+     </div>-->
+     
+      </div>`;
+
+//output pokemon data to form for db =>
 const dataToForm = (pokemon) => `<form id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
      <input type="hidden">${pokemon.name}</div>
      <input type="hidden"><img src="${getPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
@@ -112,15 +132,23 @@ const dataToForm = (pokemon) => `<form id="pokemon${pokemon.id}" class="main-pok
      <input type="hidden">Height: ${pokemon.height}</div>
      <input type="hidden" id="${pokemon.name}"/>
       
-      </form>`;
-
-
+     </form>`;
 
 //remove hyphens from names and cap first letter =>
 function getName(pokemon) {
+    if (pokemon.name.includes("mega")) {
+        let hyphen = pokemon.name.indexOf("-");
+        return pokemon.name.charAt(hyphen + 1).toUpperCase() + pokemon.name.slice(hyphen + 2)
+            + " " + pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1, hyphen);
+    }
+    if (pokemon.name.includes("gmax")){
+        let hyphen = pokemon.name.indexOf("-");
+        return "G-Max"
+            + " " + pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1, hyphen);
+    }
     if (pokemon.name.includes("-")) {
         let hyphen = pokemon.name.indexOf("-");
-        return pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(0, hyphen);
+        return pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1, hyphen);
     } else {
         return pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1);
     }
@@ -128,48 +156,49 @@ function getName(pokemon) {
 
 //use default pic if nothing available =>
 function getPic(pokemon) {
-    if (pokemon.sprites.front_default === null){
+    if (pokemon.sprites.front_default === null && pokemon.sprites.other["official-artwork"].front_default === null) {
         return "https://www.seekpng.com/png/detail/13-137344_pokeball-pokeball-png.png";
+    }
+    if (pokemon.sprites.front_default === null) {
+        return pokemon.sprites.other["official-artwork"].front_default;
     } else {
         return pokemon.sprites.front_default;
     }
 }
 
-//get typing of pokemon since only some have two =>
-function getTypes(pokemon) {
-    if (pokemon.types.length > 1){
-        return pokemon.types[0].type.name + "/" + pokemon.types[1].type.name;
+//format typing of pokemon based on size of array =>
+function getTypes(arr) {
+    if (arr.length > 1){
+        return arr[0].type.name.charAt(0).toUpperCase() + arr[0].type.name.slice(1)
+            + "/" + arr[1].type.name.charAt(0).toUpperCase() + arr[1].type.name.slice(1);
     } else {
-        return pokemon.types[0].type.name;
+        return arr[0].type.name.charAt(0).toUpperCase() + arr[0].type.name.slice(1)
     }
 }
 
-//get abilities of a pokemon based on size of array =>
-function getAbilities(pokemon) {
-    if (pokemon.abilities.length === 4) {
-        return pokemon.abilities[0].ability.name
-            + "/" + pokemon.abilities[1].ability.name
-            + "/" + pokemon.abilities[2].ability.name
-            + "/" + pokemon.abilities[3].ability.name;
-    } else if (pokemon.abilities.length === 3){
-        return pokemon.abilities[0].ability.name
-            + "/" + pokemon.abilities[1].ability.name
-            + "/" + pokemon.abilities[2].ability.name;
-    } else  if (pokemon.abilities.length === 2) {
-        return pokemon.abilities[0].ability.name
-            + "/" + pokemon.abilities[1].ability.name;
-    } else if (pokemon.abilities.length === 1){
-        return pokemon.abilities[0].ability.name;
+//format abilities of a pokemon based on size of array =>
+function getAbilities(arr) {
+    if (arr.length === 3){
+        return arr[0].ability.name.charAt(0).toUpperCase() + arr[0].ability.name.slice(1)
+            + "/" + arr[1].ability.name.charAt(0).toUpperCase() + arr[1].ability.name.slice(1)
+            + "/" + arr[2].ability.name.charAt(0).toUpperCase() + arr[2].ability.name.slice(1);
+    } else  if (arr.length === 2) {
+        return arr[0].ability.name.charAt(0).toUpperCase() + arr[0].ability.name.slice(1)
+            + "/" + arr[1].ability.name.charAt(0).toUpperCase() + arr[1].ability.name.slice(1)
+    } else if (arr.length === 1){
+        return arr[0].ability.name.charAt(0).toUpperCase() + arr[0].ability.name.slice(1);
     } else {
         return "N/A";
     }
 }
 
+//format weight =>
 function convertWeight(pokemon) {
     let hectogramToPound = pokemon.weight * 0.220462;
     return hectogramToPound.toFixed(0);
 }
 
+//format height =>
 function convertHeight(pokemon) {
     let decimeterToInch = pokemon.height * 3.93701;
 
@@ -197,17 +226,3 @@ function convertHeight(pokemon) {
         return inches + " inches";
     }
 }
-
-
-//does not work with loop:
-// fetch(url + '/charizard')
-//     .then(response => response.json())
-//     .then(response =>
-//
-//         // response.results.forEach(response => {
-//         //     $('#output-container').append(dataToDiv(response))
-//         // })
-//         $('#output-container').html(dataToDiv(response))
-//
-//     )
-//     .catch(err => console.error(err));
