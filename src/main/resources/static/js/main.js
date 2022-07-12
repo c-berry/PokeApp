@@ -8,7 +8,6 @@ function getPokemon(pokemon){
         console.log(data);
         console.log(data.id);
         console.log(data.name);
-        console.log(data.abilities);
 
         $('#output-container').append(dataToDiv(data));
     });
@@ -20,7 +19,8 @@ function searchPokemon(pokemon){
         console.log("Request status: " + status);
         console.log("Data returned from server:");
         console.log(data);
-        console.log(data.sprites)
+        // console.log(data.sprites)
+        // console.log(data.abilities);
 
         $('#output-container').html(dataToDiv(data));
     });
@@ -28,7 +28,7 @@ function searchPokemon(pokemon){
 
 //get data on 1 pokemon using fetch but there are issues when looping due to promises =>
 function fetchOnePokemon(pokemon){
-    fetch('https://pokeapi.co/api/v2/pokemon/' + pokemon)
+    fetch(url + "/" + pokemon)
         .then((response) => response.json())
         .then((data) => {
 
@@ -49,7 +49,7 @@ function getAllPokemon(){
         //// loop thru all pokemon data =>
         data.results.forEach(pokemon =>
             // console.log(pokemon.url)
-            $.ajax('https://pokeapi.co/api/v2/pokemon/' + pokemon.name).done(function (pokemon) {
+            $.ajax(url + "/" + pokemon.name).done(function (pokemon) {
 
                 $('#output-container').append(dataToDiv(pokemon));
                 console.log(pokemon);
@@ -63,7 +63,6 @@ function getAllPokemon(){
     }).always(function () {
         // alert("Gotta catch 'em all!");
     });
-
 }
 // getAllPokemon();
 
@@ -96,13 +95,11 @@ function clearPokemon() {
 $("#search-btn").click(function (e) {
     e.preventDefault();
     clearPokemon();
-
-
     const pokemon = $("#search-input").val();
     searchPokemon(pokemon);
 });
 
-//search on enter =>
+//search on enter/return key press =>
 $("#search-input").keyup(function (e) {
     if (e.keyCode === 13){
         e.preventDefault();
@@ -120,28 +117,77 @@ $("#search-input").keyup(function (e) {
 //     searchPokemon(pokemon);
 // });
 
-//view all pokemon on click =>
-$('#viewAllPokemon').click(function () {
-    clearPokemon();
-    getAllPokemon();
-});
-
 //redirect to singular view in click=>
 function viewPokemon(name){
     // alert(name);
     window.location.href = "/pokemon/" + name;
 }
 
-//get all pokemon on click
+//get all pokemon on click =>
 $('#view-all-pokemon').click(function () {
     clearPokemon();
     getAllPokemon();
-    // getAllPokemon2();
 });
 
-//loop through pokemon by id =>
-function getAllPokemon2() {
-    for (let i = 0; i < 1000; i++) {
+//loop through gen 1 Kanto pokemon by id =>
+function getKantoPokemon() {
+    for (let i = 0; i <= 151; i++) {
+        getPokemon(i);
+    }
+}
+
+//loop through gen 2 Johto pokemon by id =>
+function getJohtoPokemon() {
+    for (let i = 152; i <= 251; i++) {
+        getPokemon(i);
+    }
+}
+
+//loop through gen 3 Hoenn pokemon by id =>
+function getHoennPokemon() {
+    for (let i = 252; i <= 386; i++) {
+        getPokemon(i);
+    }
+}
+
+//loop through gen 4 Sinnoh pokemon by id =>
+function getSinnohPokemon() {
+    for (let i = 387; i <= 493; i++) {
+        getPokemon(i);
+    }
+}
+
+//loop through gen 5 Unova pokemon by id =>
+function getUnovaPokemon() {
+    for (let i = 494; i <= 649; i++) {
+        getPokemon(i);
+    }
+}
+
+//loop through gen 6 Kalos pokemon by id =>
+function getKalosPokemon() {
+    for (let i = 650; i <= 721; i++) {
+        getPokemon(i);
+    }
+}
+
+//loop through gen 7 Alolan pokemon by id =>
+function getAlolaPokemon() {
+    for (let i = 722; i <= 809; i++) {
+        getPokemon(i);
+    }
+}
+
+//loop through gen 8 Galarian pokemon by id =>
+function getGalarPokemon() {
+    for (let i = 810; i <= 898; i++) {
+        getPokemon(i);
+    }
+}
+
+//loop through Husian pokemon by id =>
+function getHisuiPokemon() {
+    for (let i = 900; i <= 905; i++) {
         getPokemon(i);
     }
 }
@@ -202,7 +248,7 @@ function getPic(pokemon) {
     }
 }
 
-//use default pic if nothing available =>
+//get shiny variant pic or default if nothing available =>
 function getShinyPic(pokemon) {
     if (pokemon.sprites.front_shiny === null) {
         return "https://www.seekpng.com/png/detail/13-137344_pokeball-pokeball-png.png";
