@@ -14,25 +14,41 @@ h1 {
 .main-pokemon-card {
     margin-top: 1.5em;
     margin-left: 1em;
-    border-style: double;
-}
-
-.pokemon-card {
-    margin-top: 1.5em;
-    margin-left: 1em;
-    margin-right: 1em;
-    border-style: double;
-}
-
-.main-pokemon-img {
-    height: 6em;
-    width: 6.5em;
+    /*border-style: double;*/
     cursor: pointer;
 }
 
-.pokemon-img {
+.view-pokemon-card {
+    margin-top: 1.5em;
+    margin-left: 1em;
+    margin-right: 1em;
+    /*border-style: double;*/
+    cursor: pointer;
+}
+
+.main-pokemon-img {
+    height: 8em;
+    width: 8.5em;
+}
+
+.view-pokemon-img {
     height: 15em;
     width: 16.5em;
+}
+
+.pokemon-name {
+    font-size: 20px;
+    font-style: italic;
+    /*font-weight: bold;*/
+}
+
+.view-pokemon-name {
+    font-size: 28px;
+    font-style: italic;
+}
+
+.pokemon-number {
+    font-weight: lighter;
 }
 
 .view-btn {

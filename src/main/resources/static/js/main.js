@@ -1,20 +1,10 @@
 "use strict";
 
-const url = "https://pokeapi.co/api/v2/pokemon";
-
-// get data on 1 pokemon =>
-function getPokemon(pokemon){
-    $.get(url + '/' + pokemon).done(function(data) {
-        console.log(data);
-        console.log(data.id);
-        console.log(data.name);
-
-        $('#output-container').append(dataToDiv(data));
-    });
-}
+const url = "https://pokeapi.co/api/v2/pokemon/";
+const url2 = "https://pokeapi.co/api/v2/pokemon";
 
 function searchPokemon(pokemon){
-    $.ajax(url + '/' + pokemon).done(function (data, status) {
+    $.ajax(url + pokemon).done(function (data, status) {
         console.log("AJAX call completed successfully!");
         console.log("Request status: " + status);
         console.log("Data returned from server:");
@@ -22,13 +12,13 @@ function searchPokemon(pokemon){
         // console.log(data.sprites)
         // console.log(data.abilities);
 
-        $('#output-container').html(dataToDiv(data));
+        $('#output-container').html(dataToDiv2(data));
     });
 }
 
 //get data on 1 pokemon using fetch but there are issues when looping due to promises =>
-function fetchOnePokemon(pokemon){
-    fetch(url + "/" + pokemon)
+function fetchPokemon(pokemon){
+    fetch(url + pokemon)
         .then((response) => response.json())
         .then((data) => {
 
@@ -36,11 +26,11 @@ function fetchOnePokemon(pokemon){
             $('#output-container').html(dataToDiv(data));
         });
 }
-// fetchOnePokemon();
+// fetchPokemon();
 
 //get all pokemon =>
 function getAllPokemon(){
-    $.ajax(url + '?limit=2000&offset=0').done(function (data, status) {
+    $.ajax(url2 + '?limit=2000&offset=0').done(function (data, status) {
         console.log("AJAX call completed successfully!");
         console.log("Request status: " + status);
         console.log("Data returned from server:");
@@ -49,7 +39,7 @@ function getAllPokemon(){
         //// loop thru all pokemon data =>
         data.results.forEach(pokemon =>
             // console.log(pokemon.url)
-            $.ajax(url + "/" + pokemon.name).done(function (pokemon) {
+            $.ajax(url + pokemon.name).done(function (pokemon) {
 
                 $('#output-container').append(dataToDiv(pokemon));
                 console.log(pokemon);
@@ -66,8 +56,9 @@ function getAllPokemon(){
 }
 // getAllPokemon();
 
+//WIP: format data to form for db =>
 function pokemonToForm(pokemon) {
-    $.ajax(url + "/" + pokemon).done(function (data) {
+    $.ajax(url + pokemon).done(function (data) {
         // const pokemon = {
         //     id: data.id,
         //     name: data.name,
@@ -110,24 +101,126 @@ $("#search-input").keyup(function (e) {
 });
 
 ////responsive search =>
-// $("#search-input").keyup(function (e) {
-//     e.preventDefault();
-//     clearPokemon();
-//     const pokemon = $("#search-input").val();
-//     searchPokemon(pokemon);
-// });
+$("#search-input").keyup(function (e) {
+    e.preventDefault();
+    clearPokemon();
+    const pokemon = $("#search-input").val();
+    searchPokemon(pokemon);
+});
 
-//redirect to singular view in click=>
-function viewPokemon(name){
-    // alert(name);
-    window.location.href = "/pokemon/" + name;
+//redirect to singular view from db on click =>
+function viewPokemon(pokemon){
+    // alert(pokemon);
+    window.location.href = "/pokemon/" + pokemon;
+}
+
+//single view of pokemon on click =>
+function viewPokemon2(pokemon){
+    // alert(pokemon);
+    clearPokemon();
+    getPokemon2(pokemon);
+}
+
+//single view of pokemon sprites on click =>
+function viewPokemon3(pokemon){
+    // alert(pokemon);
+    clearPokemon();
+    getPokemon3(pokemon);
 }
 
 //get all pokemon on click =>
-$('#view-all-pokemon').click(function () {
+$("#view-all-pokemon").click(function () {
     clearPokemon();
     getAllPokemon();
 });
+
+//get all Kanto pokemon on click =>
+$("#view-kanto-pokemon").click(function () {
+    clearPokemon();
+    getKantoPokemon();
+});
+
+//get all Johto pokemon on click =>
+$("#view-johto-pokemon").click(function () {
+    clearPokemon();
+    getJohtoPokemon();
+});
+
+//get all Hoenn pokemon on click =>
+$("#view-hoenn-pokemon").click(function () {
+    clearPokemon();
+    getHoennPokemon();
+});
+
+//get all Sinnoh pokemon on click =>
+$("#view-sinnoh-pokemon").click(function () {
+    clearPokemon();
+    getSinnohPokemon();
+});
+
+//get all Unova pokemon on click =>
+$("#view-unova-pokemon").click(function () {
+    clearPokemon();
+    getUnovaPokemon();
+});
+
+//get all Kalos pokemon on click =>
+$("#view-kalos-pokemon").click(function () {
+    clearPokemon();
+    getKalosPokemon();
+});
+
+//get all Alola pokemon on click =>
+$("#view-alola-pokemon").click(function () {
+    clearPokemon();
+    getAlolaPokemon();
+});
+
+//get all Galar pokemon on click =>
+$("#view-galar-pokemon").click(function () {
+    clearPokemon();
+    getGalarPokemon();
+});
+
+//get all Hisui pokemon on click =>
+$("#view-hisui-pokemon").click(function () {
+    clearPokemon();
+    getHisuiPokemon();
+});
+
+// get more data on 1 pokemon on main page =>
+function getPokemon2(pokemon){
+    $.ajax(url + pokemon).done(function(data) {
+        console.log(data);
+        console.log(data.id);
+        console.log(data.name);
+
+        $('#output-container').append(dataToDiv2(data));
+    });
+}
+
+// get sprite data on 1 pokemon on click after using getPokemon2=>
+function getPokemon3(pokemon){
+    $.ajax(url + pokemon).done(function(data) {
+        console.log(data);
+        console.log(data.id);
+        console.log(data.name);
+
+        $('#output-container').append(dataToDiv3(data));
+    });
+}
+
+// this fn is used by methods based on region:
+// get data on 1 pokemon =>
+function getPokemon(pokemon){
+    $.ajax(url + pokemon).done(function(data) {
+        console.log(data);
+        console.log(data.id);
+        console.log(data.name);
+
+        $('#output-container').append(dataToDiv(data));
+    });
+}
 
 //loop through gen 1 Kanto pokemon by id =>
 function getKantoPokemon() {
@@ -138,6 +231,7 @@ function getKantoPokemon() {
 
 //loop through gen 2 Johto pokemon by id =>
 function getJohtoPokemon() {
+    clearPokemon();
     for (let i = 152; i <= 251; i++) {
         getPokemon(i);
     }
@@ -145,6 +239,7 @@ function getJohtoPokemon() {
 
 //loop through gen 3 Hoenn pokemon by id =>
 function getHoennPokemon() {
+    clearPokemon();
     for (let i = 252; i <= 386; i++) {
         getPokemon(i);
     }
@@ -152,6 +247,7 @@ function getHoennPokemon() {
 
 //loop through gen 4 Sinnoh pokemon by id =>
 function getSinnohPokemon() {
+    clearPokemon();
     for (let i = 387; i <= 493; i++) {
         getPokemon(i);
     }
@@ -159,6 +255,7 @@ function getSinnohPokemon() {
 
 //loop through gen 5 Unova pokemon by id =>
 function getUnovaPokemon() {
+    clearPokemon();
     for (let i = 494; i <= 649; i++) {
         getPokemon(i);
     }
@@ -166,6 +263,7 @@ function getUnovaPokemon() {
 
 //loop through gen 6 Kalos pokemon by id =>
 function getKalosPokemon() {
+    clearPokemon();
     for (let i = 650; i <= 721; i++) {
         getPokemon(i);
     }
@@ -173,6 +271,7 @@ function getKalosPokemon() {
 
 //loop through gen 7 Alolan pokemon by id =>
 function getAlolaPokemon() {
+    clearPokemon();
     for (let i = 722; i <= 809; i++) {
         getPokemon(i);
     }
@@ -180,6 +279,7 @@ function getAlolaPokemon() {
 
 //loop through gen 8 Galarian pokemon by id =>
 function getGalarPokemon() {
+    clearPokemon();
     for (let i = 810; i <= 898; i++) {
         getPokemon(i);
     }
@@ -187,37 +287,65 @@ function getGalarPokemon() {
 
 //loop through Husian pokemon by id =>
 function getHisuiPokemon() {
+    clearPokemon();
     for (let i = 900; i <= 905; i++) {
         getPokemon(i);
     }
 }
 
 //output pokemon data to html view =>
-const dataToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1" onclick="viewPokemon('${pokemon.name}')">
-     <div class="content pokemon-name">${getName(pokemon)}</div>
-     <div class="content">#${pokemon.id}</div>
-     <div class="content"><img src="${getPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
-     <div class="content">Type: ${getTypes(pokemon.types)}</div>
-     <div class="content">Ability: ${getAbilities(pokemon.abilities)}</div>
-     <div class="content">Height: ${convertHeight(pokemon)}</div>
-     <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>  
-     
-     </div>`;
+const dataToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-2" onclick="viewPokemon2('${pokemon.name}')">
+    <div class="content pokemon-number">No. ${pokemon.id}</div>
+    <div class="content pokemon-name">${getName(pokemon)}</div>
+    <div class="content"><img src="${getPic(pokemon)}" alt="pokemon-official-artwork" class="main-pokemon-img"></div>
+    
+    </div>`;
+
+//output pokemon data to html view =>
+const dataToDiv2 = (pokemon) => `<div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto px-2 py-2" onclick="viewPokemon3('${pokemon.name}')">
+    <div class="content pokemon-number">No. ${pokemon.id}</div>
+    <div class="content view-pokemon-name">${getName(pokemon)}</div>
+    <div class="content pokemon-number">(Click to view game sprites)</div>
+    <div class="content mb-1"><img src="${getPic(pokemon)}" alt="pokemon-official-artwork" class="view-pokemon-img"></div>
+    <div class="content">Type: ${getTypes(pokemon.types)}</div>
+    <div class="content">Ability: ${getAbilities(pokemon.abilities)}</div>
+    <div class="content">Height: ${convertHeight(pokemon)}</div>
+    <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>  
+    
+    </div>`;
+
+//output game sprites to view =>
+const dataToDiv3 = (pokemon) => `<div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto px-2 py-2" onclick="viewPokemon2('${pokemon.name}')">
+    <div class="content pokemon-number">No. ${pokemon.id}</div>
+    <div class="content pokemon-name">${getName(pokemon)}</div>
+     <div class="content">
+        <img src="${getSprite(pokemon)}" alt="pokemon-sprite" class="main-pokemon-img">
+        <img src="${getSprite2(pokemon)}" alt="pokemon" class="main-pokemon-img">
+    </div>
+    <div class="content">
+        <img src="${getShinySprite(pokemon)}" alt="pokemon-sprite" class="main-pokemon-img">
+        <img src="${getShinySprite2(pokemon)}" alt="pokemon-sprite" class="main-pokemon-img">
+    </div>  
+    
+    </div>`;
 
 //output pokemon data to form for db =>
 const dataToForm = (pokemon) => `<form id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
-     <input type="hidden">${pokemon.name}</div>
-     <input type="hidden"><img src="${getPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
-     <div class="content"><img src="${getShinyPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
-     <input type="hidden">Type: ${getTypes(pokemon)}</div>
-     <input type="hidden">Ability: ${pokemon.abilities}</div>
-     <input type="hidden">Height: ${pokemon.height}</div>
-     <input type="hidden" id="${pokemon.name}"/>
-      
-     </form>`;
+    <input type="hidden">${pokemon.name}</div>
+    <input type="hidden"><img src="${getSprite(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
+    <div class="content"><img src="${getShinySprite(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
+    <input type="hidden">Type: ${getTypes(pokemon)}</div>
+    <input type="hidden">Ability: ${pokemon.abilities}</div>
+    <input type="hidden">Height: ${pokemon.height}</div>
+    <input type="hidden" id="${pokemon.name}"/>
+    
+    </form>`;
 
 //remove hyphens from names and cap first letter =>
 function getName(pokemon) {
+    if (pokemon.name === "meganium") {
+        return "Meganium";
+    }
     if (pokemon.name.includes("mega")) {
         let hyphen = pokemon.name.indexOf("-");
         return pokemon.name.charAt(hyphen + 1).toUpperCase() + pokemon.name.slice(hyphen + 2)
@@ -227,6 +355,9 @@ function getName(pokemon) {
         let hyphen = pokemon.name.indexOf("-");
         return "G-Max"
             + " " + pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1, hyphen);
+    }
+    if (pokemon.name.includes("mr-mime")) {
+        return "Mr. Mime";
     }
     if (pokemon.name.includes("-")) {
         let hyphen = pokemon.name.indexOf("-");
@@ -238,6 +369,15 @@ function getName(pokemon) {
 
 //use default pic if nothing available =>
 function getPic(pokemon) {
+    if (pokemon.sprites.other["official-artwork"].front_default === null) {
+        return "https://www.seekpng.com/png/detail/13-137344_pokeball-pokeball-png.png";
+    } else {
+       return pokemon.sprites.other["official-artwork"].front_default;
+    }
+}
+
+//use default pic if nothing available =>
+function getSprite(pokemon) {
     if (pokemon.sprites.front_default === null && pokemon.sprites.other["official-artwork"].front_default === null) {
         return "https://www.seekpng.com/png/detail/13-137344_pokeball-pokeball-png.png";
     }
@@ -248,12 +388,30 @@ function getPic(pokemon) {
     }
 }
 
+//use default pic if nothing available =>
+function getSprite2(pokemon) {
+    if (pokemon.sprites.back_default === null) {
+        return "https://www.seekpng.com/png/detail/13-137344_pokeball-pokeball-png.png";
+    } else {
+        return pokemon.sprites.back_default;
+    }
+}
+
 //get shiny variant pic or default if nothing available =>
-function getShinyPic(pokemon) {
+function getShinySprite(pokemon) {
     if (pokemon.sprites.front_shiny === null) {
         return "https://www.seekpng.com/png/detail/13-137344_pokeball-pokeball-png.png";
     } else {
         return pokemon.sprites.front_shiny;
+    }
+}
+
+//use default pic if nothing available =>
+function getShinySprite2(pokemon) {
+    if (pokemon.sprites.back_shiny === null) {
+        return "https://www.seekpng.com/png/detail/13-137344_pokeball-pokeball-png.png";
+    } else {
+        return pokemon.sprites.back_shiny;
     }
 }
 

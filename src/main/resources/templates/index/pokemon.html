@@ -17,10 +17,10 @@
 
 <div th:if="!${pokemon}" id="output-container" class="container d-flex flex-wrap"></div>
 
-<div th:if="${pokemon}" th:id="${pokemon.id}" class="pokemon-card px-2 py-1">
+<div th:if="${pokemon}" th:id="${pokemon.id}" class="view-pokemon-card px-2 py-1">
 
     <h3 th:text="${pokemon.name}" class="content"></h3>
-    <div class="content"><img th:src="${pokemon.sprite}" alt="pokemon-sprite" class="pokemon-img"></div>
+    <div class="content"><img th:src="${pokemon.sprite}" alt="pokemon-sprite" class="view-pokemon-img"></div>
 
     <div th:if="${pokemon.type.size()} == 1">
         <div th:text="'Type: ' + ${types[0].name}" class="content"></div>

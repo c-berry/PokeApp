@@ -13,19 +13,28 @@
 
 <h1>PokeApp</h1>
 
-<div class="">
-    <input id="search-input" type="search" class="" placeholder="Search Pokemon" aria-label="Search" aria-describedby="search-addon" />
-    <button id="search-btn" class="btn btn-secondary">Search</button>
-    <button id="view-all-pokemon" class="btn btn-dark mx-2">View All</button>
+<hr>
+
+<div class="container d-flex flex-wrap my-2">
+    <button id="view-all-pokemon" class="btn btn-success mx-1 my-1">View All</button>
+    <button id="view-kanto-pokemon" class="btn btn-dark mx-1 my-1">Kanto</button>
+    <button id="view-johto-pokemon" class="btn btn-dark mx-1 my-1">Johto</button>
+    <button id="view-hoenn-pokemon" class="btn btn-dark mx-1 my-1">Hoenn</button>
+    <button id="view-sinnoh-pokemon" class="btn btn-dark mx-1 my-1">Sinnoh</button>
+    <button id="view-unova-pokemon" class="btn btn-dark mx-1 my-1">Unova</button>
+    <button id="view-kalos-pokemon" class="btn btn-dark mx-1 my-1">Kalos</button>
+    <button id="view-alola-pokemon" class="btn btn-dark mx-1 my-1">Alola</button>
+    <button id="view-galar-pokemon" class="btn btn-dark mx-1 my-1">Galar</button>
+    <button id="view-hisui-pokemon" class="btn btn-dark mx-1 my-1">Hisui</button>
+    <div class="mx-1 my-1 d-flex">
+        <input id="search-input" type="search" class="py-1 mx-1" placeholder="Search Pokemon" aria-label="Search" aria-describedby="search-addon" />
+        <button id="search-btn" class="btn btn-primary">Search</button>
+    </div>
 </div>
 
-
-
 <hr>
 
-<div id="output-container" class="container d-flex flex-wrap"></div>
-
-<hr>
+<div id="output-container" class="px-2 px-1 container d-flex flex-wrap"></div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
