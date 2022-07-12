@@ -359,6 +359,9 @@ function getName(pokemon) {
     if (pokemon.name.includes("mr-mime")) {
         return "Mr. Mime";
     }
+    if (pokemon.name.includes("mr-rime")) {
+        return "Mr. Rime";
+    }
     if (pokemon.name.includes("-")) {
         let hyphen = pokemon.name.indexOf("-");
         return pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1, hyphen);
