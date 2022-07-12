@@ -55,7 +55,19 @@
         integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
 </script>
 <script th:src="@{/js/main.js}"></script>
-<script></script>
+
+<script th:if="${pokemon}">
+    const urlParams = window.location.href;
+    let indexOfSlash = urlParams.lastIndexOf('/');
+    let pokemon = urlParams.substring(indexOfSlash) + 1;
+
+    // searcher(myParam);
+    // const myForm = document.getElementById("myForm");
+    // myForm.submit();
+
+    console.log(pokemon);
+    // console.log(urlParams);
+</script>
 
 </body>
 </html>

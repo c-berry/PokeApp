@@ -13,7 +13,6 @@ function getPokemon(pokemon){
         $('#output-container').append(dataToDiv(data));
     });
 }
-// getCharizard();
 
 function searchPokemon(pokemon){
     $.ajax(url + '/' + pokemon).done(function (data, status) {
@@ -21,6 +20,7 @@ function searchPokemon(pokemon){
         console.log("Request status: " + status);
         console.log("Data returned from server:");
         console.log(data);
+        console.log(data.sprites)
 
         $('#output-container').html(dataToDiv(data));
     });
@@ -67,6 +67,26 @@ function getAllPokemon(){
 }
 // getAllPokemon();
 
+function pokemonToForm(pokemon) {
+    $.ajax(url + "/" + pokemon).done(function (data) {
+        // const pokemon = {
+        //     id: data.id,
+        //     name: data.name,
+        //     sprite: getPic(data),
+        //     shinysprite: getShinyPic(data),
+        //     types: data.types,
+        //     abilities: data.abilities,
+        //     height: data.height,
+        //     weight: data.weight
+        //
+        // }
+
+        $('#output-container').html(dataToForm(data));
+        const form = document.getElementById("myForm");
+        form.submit();
+    });
+}
+
 //clear output container =>
 function clearPokemon() {
     $("#output-container").html("")
@@ -76,9 +96,29 @@ function clearPokemon() {
 $("#search-btn").click(function (e) {
     e.preventDefault();
     clearPokemon();
-    const pokemon = $("#search-input").val()
+
+
+    const pokemon = $("#search-input").val();
     searchPokemon(pokemon);
 });
+
+//search on enter =>
+$("#search-input").keyup(function (e) {
+    if (e.keyCode === 13){
+        e.preventDefault();
+        clearPokemon();
+        const pokemon = $("#search-input").val();
+        searchPokemon(pokemon);
+    }
+});
+
+////responsive search =>
+// $("#search-input").keyup(function (e) {
+//     e.preventDefault();
+//     clearPokemon();
+//     const pokemon = $("#search-input").val();
+//     searchPokemon(pokemon);
+// });
 
 //view all pokemon on click =>
 $('#viewAllPokemon').click(function () {
@@ -116,17 +156,13 @@ const dataToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokem
      <div class="content">Height: ${convertHeight(pokemon)}</div>
      <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>  
      
-<!--     <input type="hidden" id="name" value="${pokemon.name}">-->
-<!--     <div class="content">
-        <button class="view-btn btn-primary" onclick="viewPokemon('${pokemon.name}')">View</button>
-     </div>-->
-     
-      </div>`;
+     </div>`;
 
 //output pokemon data to form for db =>
 const dataToForm = (pokemon) => `<form id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
      <input type="hidden">${pokemon.name}</div>
      <input type="hidden"><img src="${getPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
+     <div class="content"><img src="${getShinyPic(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
      <input type="hidden">Type: ${getTypes(pokemon)}</div>
      <input type="hidden">Ability: ${pokemon.abilities}</div>
      <input type="hidden">Height: ${pokemon.height}</div>
@@ -163,6 +199,15 @@ function getPic(pokemon) {
         return pokemon.sprites.other["official-artwork"].front_default;
     } else {
         return pokemon.sprites.front_default;
+    }
+}
+
+//use default pic if nothing available =>
+function getShinyPic(pokemon) {
+    if (pokemon.sprites.front_shiny === null) {
+        return "https://www.seekpng.com/png/detail/13-137344_pokeball-pokeball-png.png";
+    } else {
+        return pokemon.sprites.front_shiny;
     }
 }
 
