@@ -82,7 +82,12 @@ function pokemonToForm(pokemon) {
 
 //clear output container =>
 function clearPokemon() {
-    $("#output-container").html("")
+    $("#output-container").html("");
+}
+
+//clear favorite output container =>
+function clearPokemon2(){
+    $("#favorites").html("");
 }
 
 //search bar function on click =>
@@ -121,6 +126,7 @@ function viewPokemon(pokemon){
 function viewPokemon2(pokemon){
     // alert(pokemon);
     clearPokemon();
+    clearPokemon2();
     getPokemon2(pokemon);
 }
 
@@ -307,9 +313,9 @@ const dataToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokem
     </div>`;
 
 //output pokemon data to html view =>
-const dataToDiv2 = (pokemon) => `<form action="/pokemon/favorite" method="POST">
+const dataToDiv2 = (pokemon) => `<form action="/pokemon/save" method="POST">
 
-    <div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto px-2 py-2">
+    <div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto my-auto px-2 py-2">
         <div class="content pokemon-number">No. ${pokemon.id}</div>
         <div class="content view-pokemon-name">${getName(pokemon)}</div>
         <div class="content pokemon-number" onclick="viewPokemon3('${pokemon.name}')">(Click to view game sprites)</div>
@@ -321,14 +327,17 @@ const dataToDiv2 = (pokemon) => `<form action="/pokemon/favorite" method="POST">
         
         <input type="hidden" name="id" value="${pokemon.id}"/>
         <input type="hidden" name="name" value="${pokemon.name}"/>
+        <input type="hidden" name="official-art" value="${getPic(pokemon)}"/>
         <input type="hidden" name="sprite" value="${getSprite(pokemon)}"/>
-        <input type="hidden" name="spriteshiny" value="${getShinySprite(pokemon)}"/>
+        <input type="hidden" name="sprite-shiny" value="${getShinySprite(pokemon)}"/>
         <input type="hidden" name="types" value="${getTypes2(pokemon.types)}"/>
         <input type="hidden" name="abilities" value="${getAbilities2(pokemon.abilities)}"/>
         <input type="hidden" name="height" value="${pokemon.height}">  
         <input type="hidden" name="weight" value="${pokemon.weight}">
         
-        <button type="submit">Favorite</button>
+        <div class="content mt-2">
+            <button type="submit" class="btn btn-success">Favorite</button>
+        </div>
         
     </div>
 </form>`;
@@ -336,7 +345,7 @@ const dataToDiv2 = (pokemon) => `<form action="/pokemon/favorite" method="POST">
 //output game sprites to view =>
 const dataToDiv3 = (pokemon) => `<form th:action="" th:method="POST">
 
-        <div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto px-2 py-2" onclick="viewPokemon2('${pokemon.name}')">
+        <div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto px-2 py-2" onclick="viewPokemon2('${pokemon.id}')">
             <div class="content pokemon-number">No. ${pokemon.id}</div>
             <div class="content view-pokemon-name">${getName(pokemon)}</div>
             <div class="content">
@@ -518,3 +527,11 @@ function convertHeight(pokemon) {
         return inches + " inches";
     }
 }
+
+function redirectToMain(pokemon){
+    window.location = "/";
+    // setTimeout(function () {
+    //     viewPokemon2(pokemon)}, 5000);
+}
+
+

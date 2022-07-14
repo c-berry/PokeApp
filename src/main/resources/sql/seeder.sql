@@ -2,8 +2,8 @@ CREATE DATABASE IF NOT EXISTS pokemon_db;
 
 USE pokemon_db;
 
-INSERT INTO pokemon (api_id, name, weight, height, sprite, sprite_shiny)
-VALUES (6, 'charizard', 905, 17, 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/6.png');
+INSERT INTO pokemon (api_id, name, weight, height, official_art, sprite, sprite_shiny)
+VALUES (6, 'charizard', 905, 17, 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png', 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/6.png');
 
 INSERT INTO type (name)
 VALUES ('normal'),

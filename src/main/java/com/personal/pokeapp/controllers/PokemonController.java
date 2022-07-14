@@ -44,21 +44,38 @@ public class PokemonController {
         return "index/pokemon";
     }
 
-    @PostMapping("/favorite")
-    public String favoritePokemon(
+    @PostMapping("/save")
+    public String savePokemon(
             @RequestParam(name = "id") long id,
-            @RequestParam(name= "name") String name,
+            @RequestParam(name = "name") String name,
             @RequestParam(name = "weight") int weight,
             @RequestParam(name = "height") int height,
+            @RequestParam(name = "official-art") String officalart,
             @RequestParam(name = "sprite") String sprite,
-            @RequestParam(name = "spriteshiny") String spriteshiny,
+            @RequestParam(name = "sprite-shiny") String spriteshiny,
             @RequestParam(name = "types") List<Type> types,
-            @RequestParam(name = "abilities") List <Ability> abilities){
+            @RequestParam(name = "abilities") List<Ability> abilities) {
 
-        Pokemon pokemon = new Pokemon(id, name, weight, height, sprite, spriteshiny, types, abilities);
+        Pokemon pokemon = new Pokemon(id, name, weight, height, officalart, sprite, spriteshiny, types, abilities);
+
+        if(pokemonDao.existsByApiId(id)){
+            return "redirect:/pokemon";
+        }
+
         pokemonDao.save(pokemon);
 
-        return "index/main";
+        return "redirect:/pokemon";
     }
 
-}
+    @GetMapping()
+    public String viewFavorites(Model model) {
+
+        List<Pokemon> favoritePokemon = pokemonDao.findAll();
+
+        model.addAttribute("favoritePokemon", favoritePokemon);
+
+        return "index/favorites";
+    }
+
+} //end of Controller
+

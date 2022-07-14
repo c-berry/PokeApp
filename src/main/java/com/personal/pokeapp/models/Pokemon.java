@@ -26,6 +26,9 @@ public class Pokemon {
     private int height;
 
     @Column
+    private String officialArt;
+
+    @Column
     private String sprite;
 
     @Column
@@ -56,20 +59,12 @@ public class Pokemon {
 
     public Pokemon(){}
 
-    public Pokemon(long apiId, String name, int weight, int height, String sprite, String spriteShiny) {
+    public Pokemon(long apiId, String name, int weight, int height, String officialArt, String sprite, String spriteShiny, List<Type> type, List<Ability> ability) {
         this.apiId = apiId;
         this.name = name;
         this.weight = weight;
         this.height = height;
-        this.sprite = sprite;
-        this.spriteShiny = spriteShiny;
-    }
-
-    public Pokemon(long apiId, String name, int weight, int height, String sprite, String spriteShiny, List<Type> type, List<Ability> ability) {
-        this.apiId = apiId;
-        this.name = name;
-        this.weight = weight;
-        this.height = height;
+        this.officialArt = officialArt;
         this.sprite = sprite;
         this.spriteShiny = spriteShiny;
         this.type = type;
@@ -146,6 +141,14 @@ public class Pokemon {
 
     public void setAbility(List<Ability> ability) {
         this.ability = ability;
+    }
+
+    public String getOfficialArt() {
+        return officialArt;
+    }
+
+    public void setOfficialArt(String officialArt) {
+        this.officialArt = officialArt;
     }
 
     public String getSprite() {
