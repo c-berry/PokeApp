@@ -1,6 +1,6 @@
 h1 {
     text-align: center;
-    color: red;
+    /*color: red;*/
 }
 
 .main-header{
@@ -53,5 +53,10 @@ h1 {
 }
 
 .pokemon-number {
+    font-weight: lighter;
+}
+
+.favorites-header {
+    font-family: Copperplate, serif;
     font-weight: lighter;
 }

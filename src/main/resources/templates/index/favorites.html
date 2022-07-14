@@ -16,7 +16,11 @@
 <hr>
 
 <div class="container d-flex flex-wrap justify-content-center my-2">
-    <button id="view-all-pokemon" class="btn btn-success mx-1 my-1" onclick="redirectToMain()">Home</button>
+    <button class="btn btn-success mx-1 my-1" onclick="redirectToMain()">Home</button>
+</div>
+
+<div class="content mt-3 mb-2">
+    <h1 class="favorites-header">Community Favorites</h1>
 </div>
 
 <hr>
@@ -26,7 +30,7 @@
 
         <div class="main-pokemon-card px-2 py-2" >
             <div th:text="'No. ' + ${pokemon.apiId}" class="content pokemon-number"></div>
-            <div th:text="${pokemon.name}" class="content pokemon-name"></div>
+            <div th:text="${#strings.capitalize(pokemon.name)}" class="content pokemon-name"></div>
             <div class="content"><img th:src="${pokemon.officialArt}" alt="pokemon-sprite" class="main-pokemon-img"></div>
         </div>
 
