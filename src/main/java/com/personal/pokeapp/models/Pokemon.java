@@ -30,6 +30,9 @@ public class Pokemon {
 
     @Column
     private String spriteShiny;
+//
+//    @Column
+//    private String type;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -38,6 +41,10 @@ public class Pokemon {
             inverseJoinColumns = {@JoinColumn(name = "type_id")}
     )
     private List<Type> type = new ArrayList<>();
+
+
+//    @Column
+//    private String ability;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -109,7 +116,23 @@ public class Pokemon {
         this.height = height;
     }
 
-    public List<Type> getType() {
+//    public String getType() {
+//        return type;
+//    }
+//
+//    public void setType(String type) {
+//        this.type = type;
+//    }
+//
+//    public String getAbility() {
+//        return ability;
+//    }
+//
+//    public void setAbility(String ability) {
+//        this.ability = ability;
+//    }
+
+        public List<Type> getType() {
         return type;
     }
 

@@ -7,10 +7,7 @@ import com.personal.pokeapp.repositories.PokemonRepository;
 import com.personal.pokeapp.repositories.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.MapsId;
 import java.text.DecimalFormat;
@@ -45,6 +42,23 @@ public class PokemonController {
         model.addAttribute("weight", weightLbs);
 
         return "index/pokemon";
+    }
+
+    @PostMapping("/favorite")
+    public String favoritePokemon(
+            @RequestParam(name = "id") long id,
+            @RequestParam(name= "name") String name,
+            @RequestParam(name = "weight") int weight,
+            @RequestParam(name = "height") int height,
+            @RequestParam(name = "sprite") String sprite,
+            @RequestParam(name = "spriteshiny") String spriteshiny,
+            @RequestParam(name = "types") List<Type> types,
+            @RequestParam(name = "abilities") List <Ability> abilities){
+
+        Pokemon pokemon = new Pokemon(id, name, weight, height, sprite, spriteshiny, types, abilities);
+        pokemonDao.save(pokemon);
+
+        return "index/main";
     }
 
 }

@@ -10,7 +10,10 @@ function searchPokemon(pokemon){
         console.log("Data returned from server:");
         console.log(data);
         // console.log(data.sprites)
-        // console.log(data.abilities);
+        console.log(data.types);
+        console.log(getTypes2(data.types));
+        console.log(data.abilities);
+        console.log(getAbilities2(data.abilities));
 
         $('#output-container').html(dataToDiv2(data));
     });
@@ -86,25 +89,25 @@ function clearPokemon() {
 $("#search-btn").click(function (e) {
     e.preventDefault();
     clearPokemon();
-    const pokemon = $("#search-input").val();
+    let pokemon = $("#search-input").val();
     searchPokemon(pokemon);
 });
 
-//search on enter/return key press =>
-$("#search-input").keyup(function (e) {
-    if (e.keyCode === 13){
-        e.preventDefault();
-        clearPokemon();
-        const pokemon = $("#search-input").val();
-        searchPokemon(pokemon);
-    }
-});
+// //search on enter/return key press =>
+// $("#search-input").keyup(function (e) {
+//     if (e.keyCode === 13){
+//         e.preventDefault();
+//         clearPokemon();
+//         const pokemon = $("#search-input").val();
+//         searchPokemon(pokemon);
+//    
+// });
 
 ////responsive search =>
 $("#search-input").keyup(function (e) {
     e.preventDefault();
     clearPokemon();
-    const pokemon = $("#search-input").val();
+    let pokemon = $("#search-input").val();
     searchPokemon(pokemon);
 });
 
@@ -214,9 +217,9 @@ function getPokemon3(pokemon){
 // get data on 1 pokemon =>
 function getPokemon(pokemon){
     $.ajax(url + pokemon).done(function(data) {
-        console.log(data);
-        console.log(data.id);
-        console.log(data.name);
+        // console.log(data);
+        // console.log(data.id);
+        // console.log(data.name);
 
         $('#output-container').append(dataToDiv(data));
     });
@@ -224,6 +227,7 @@ function getPokemon(pokemon){
 
 //loop through gen 1 Kanto pokemon by id =>
 function getKantoPokemon() {
+    clearPokemon();
     for (let i = 0; i <= 151; i++) {
         getPokemon(i);
     }
@@ -298,45 +302,64 @@ const dataToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokem
     <div class="content pokemon-number">No. ${pokemon.id}</div>
     <div class="content pokemon-name">${getName(pokemon)}</div>
     <div class="content"><img src="${getPic(pokemon)}" alt="pokemon-official-artwork" class="main-pokemon-img"></div>
+    <div class="content pokemon-number">(Click for details)</div>
     
     </div>`;
 
 //output pokemon data to html view =>
-const dataToDiv2 = (pokemon) => `<div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto px-2 py-2" onclick="viewPokemon3('${pokemon.name}')">
-    <div class="content pokemon-number">No. ${pokemon.id}</div>
-    <div class="content view-pokemon-name">${getName(pokemon)}</div>
-    <div class="content pokemon-number">(Click to view game sprites)</div>
-    <div class="content mb-1"><img src="${getPic(pokemon)}" alt="pokemon-official-artwork" class="view-pokemon-img"></div>
-    <div class="content">Type: ${getTypes(pokemon.types)}</div>
-    <div class="content">Ability: ${getAbilities(pokemon.abilities)}</div>
-    <div class="content">Height: ${convertHeight(pokemon)}</div>
-    <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>  
-    
-    </div>`;
+const dataToDiv2 = (pokemon) => `<form action="/pokemon/favorite" method="POST">
+
+    <div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto px-2 py-2">
+        <div class="content pokemon-number">No. ${pokemon.id}</div>
+        <div class="content view-pokemon-name">${getName(pokemon)}</div>
+        <div class="content pokemon-number" onclick="viewPokemon3('${pokemon.name}')">(Click to view game sprites)</div>
+        <div class="content mb-1" onclick="viewPokemon3('${pokemon.name}')"><img src="${getPic(pokemon)}" alt="pokemon-official-artwork" class="view-pokemon-img"></div>
+        <div class="content">Type: ${getTypes(pokemon.types)}</div>
+        <div class="content">Ability: ${getAbilities(pokemon.abilities)}</div>
+        <div class="content">Height: ${convertHeight(pokemon)}</div>
+        <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>
+        
+        <input type="hidden" name="id" value="${pokemon.id}"/>
+        <input type="hidden" name="name" value="${pokemon.name}"/>
+        <input type="hidden" name="sprite" value="${getSprite(pokemon)}"/>
+        <input type="hidden" name="spriteshiny" value="${getShinySprite(pokemon)}"/>
+        <input type="hidden" name="types" value="${getTypes2(pokemon.types)}"/>
+        <input type="hidden" name="abilities" value="${getAbilities2(pokemon.abilities)}"/>
+        <input type="hidden" name="height" value="${pokemon.height}">  
+        <input type="hidden" name="weight" value="${pokemon.weight}">
+        
+        <button type="submit">Favorite</button>
+        
+    </div>
+</form>`;
 
 //output game sprites to view =>
-const dataToDiv3 = (pokemon) => `<div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto px-2 py-2" onclick="viewPokemon2('${pokemon.name}')">
-    <div class="content pokemon-number">No. ${pokemon.id}</div>
-    <div class="content pokemon-name">${getName(pokemon)}</div>
-     <div class="content">
-        <img src="${getSprite(pokemon)}" alt="pokemon-sprite" class="main-pokemon-img">
-        <img src="${getSprite2(pokemon)}" alt="pokemon" class="main-pokemon-img">
-    </div>
-    <div class="content">
-        <img src="${getShinySprite(pokemon)}" alt="pokemon-sprite" class="main-pokemon-img">
-        <img src="${getShinySprite2(pokemon)}" alt="pokemon-sprite" class="main-pokemon-img">
-    </div>  
-    
-    </div>`;
+const dataToDiv3 = (pokemon) => `<form th:action="" th:method="POST">
+
+        <div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto px-2 py-2" onclick="viewPokemon2('${pokemon.name}')">
+            <div class="content pokemon-number">No. ${pokemon.id}</div>
+            <div class="content view-pokemon-name">${getName(pokemon)}</div>
+            <div class="content">
+                <img src="${getSprite(pokemon)}" alt="pokemon-sprite" class="main-pokemon-img">
+                <img src="${getSprite2(pokemon)}" alt="pokemon" class="main-pokemon-img">
+            </div>
+            <div class="content">
+                <img src="${getShinySprite(pokemon)}" alt="pokemon-sprite" class="main-pokemon-img">
+                <img src="${getShinySprite2(pokemon)}" alt="pokemon-sprite" class="main-pokemon-img">
+            </div>  
+        
+        </div>
+    </form>`;
 
 //output pokemon data to form for db =>
 const dataToForm = (pokemon) => `<form id="pokemon${pokemon.id}" class="main-pokemon-card px-2 py-1">
-    <input type="hidden">${pokemon.name}</div>
-    <input type="hidden"><img src="${getSprite(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
-    <div class="content"><img src="${getShinySprite(pokemon)}" alt="pokemon" class="main-pokemon-img"></div>
-    <input type="hidden">Type: ${getTypes(pokemon)}</div>
-    <input type="hidden">Ability: ${pokemon.abilities}</div>
-    <input type="hidden">Height: ${pokemon.height}</div>
+    <input type="hidden" value="${pokemon.id}"/>
+    <input type="hidden" value="${pokemon.name}"/>
+    <input type="hidden" value="${getSprite(pokemon)}"/>
+    <input type="hidden" value="${getShinySprite(pokemon)}"/>
+    <input type="hidden" value="${getTypes2(pokemon.types)}"/>
+    <input type="hidden" value="${getAbilities2(pokemon.abilities)}"/>
+    <input type="hidden" value="${pokemon.height}">
     <input type="hidden" id="${pokemon.name}"/>
     
     </form>`;
@@ -428,6 +451,15 @@ function getTypes(arr) {
     }
 }
 
+//get only type names from array =>
+function getTypes2(arr){
+    let types =[];
+    for (let i = 0; i < arr.length; i++){
+        types.push(arr[i].type.name);
+    }
+    return types;
+}
+
 //format abilities of a pokemon based on size of array =>
 function getAbilities(arr) {
     if (arr.length === 3){
@@ -442,6 +474,14 @@ function getAbilities(arr) {
     } else {
         return "N/A";
     }
+}
+
+function getAbilities2(arr) {
+    let abilities = [];
+    for (let i = 0; i < arr.length; i++) {
+        abilities.push(arr[i].ability.name);
+    }
+    return abilities;
 }
 
 //format weight =>

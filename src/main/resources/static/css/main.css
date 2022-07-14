@@ -3,6 +3,11 @@ h1 {
     color: red;
 }
 
+.main-header{
+    width: 20em;
+    height: 7em;
+}
+
 #output-container {
 
 }
@@ -49,9 +54,4 @@ h1 {
 
 .pokemon-number {
     font-weight: lighter;
-}
-
-.view-btn {
-    /*display: flex;*/
-    /*justify-content: center;*/
 }
