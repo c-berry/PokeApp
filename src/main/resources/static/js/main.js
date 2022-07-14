@@ -80,6 +80,18 @@ function pokemonToForm(pokemon) {
     });
 }
 
+////responsive search =>
+$("#search-input").keyup(function (e) {
+    e.preventDefault();
+    clearPokemon();
+    let pokemon = $("#search-input").val();
+    searchPokemon(pokemon);
+});
+
+function clearSearch(){
+    $("#search-input").val("");
+}
+
 //clear output container =>
 function clearPokemon() {
     $("#output-container").html("");
@@ -108,14 +120,6 @@ $("#search-btn").click(function (e) {
 //    
 // });
 
-////responsive search =>
-$("#search-input").keyup(function (e) {
-    e.preventDefault();
-    clearPokemon();
-    let pokemon = $("#search-input").val();
-    searchPokemon(pokemon);
-});
-
 //redirect to singular view from db on click =>
 function viewPokemon(pokemon){
     // alert(pokemon);
@@ -127,6 +131,7 @@ function viewPokemon2(pokemon){
     // alert(pokemon);
     clearPokemon();
     clearPokemon2();
+    // clearSearch();
     getPokemon2(pokemon);
 }
 
@@ -134,6 +139,7 @@ function viewPokemon2(pokemon){
 function viewPokemon3(pokemon){
     // alert(pokemon);
     clearPokemon();
+    // clearSearch();
     getPokemon3(pokemon);
 }
 
@@ -345,7 +351,7 @@ const dataToDiv2 = (pokemon) => `<form action="/pokemon/save" method="POST">
 //output game sprites to view =>
 const dataToDiv3 = (pokemon) => `<form th:action="" th:method="POST">
 
-        <div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto px-2 py-2" onclick="viewPokemon2('${pokemon.id}')">
+        <div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto my-auto px-2 py-2" onclick="viewPokemon2('${pokemon.id}')">
             <div class="content pokemon-number">No. ${pokemon.id}</div>
             <div class="content view-pokemon-name">${getName(pokemon)}</div>
             <div class="content">

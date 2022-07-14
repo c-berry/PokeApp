@@ -70,7 +70,7 @@ public class PokemonController {
     @GetMapping()
     public String viewFavorites(Model model) {
 
-        List<Pokemon> favoritePokemon = pokemonDao.findAll();
+        List<Pokemon> favoritePokemon = pokemonDao.findAllFavorites();
 
         model.addAttribute("favoritePokemon", favoritePokemon);
 

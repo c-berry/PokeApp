@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="d-flex justify-content-center mt-1">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/2560px-International_Pok%C3%A9mon_logo.svg.png" alt="pokemon" class="main-header">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/2560px-International_Pok%C3%A9mon_logo.svg.png" alt="pokemon" class="main-header" onclick="redirectToMain()">
 </div>
 
 <hr>
@@ -28,7 +28,7 @@
 <div th:if="${favoritePokemon}" id="favorites" class="px-2 px-1 container d-flex flex-wrap justify-content-center">
     <div th:each="pokemon : ${favoritePokemon}">
 
-        <div class="main-pokemon-card px-2 py-2" >
+        <div class="favorite-pokemon-card px-2 py-2" >
             <div th:text="'No. ' + ${pokemon.apiId}" class="content pokemon-number"></div>
             <div th:text="${#strings.capitalize(pokemon.name)}" class="content pokemon-name"></div>
             <div class="content"><img th:src="${pokemon.officialArt}" alt="pokemon-sprite" class="main-pokemon-img"></div>
