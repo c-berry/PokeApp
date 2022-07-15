@@ -3,24 +3,24 @@
 const url = "https://pokeapi.co/api/v2/pokemon/";
 const url2 = "https://pokeapi.co/api/v2/pokemon";
 
-function searchPokemon(pokemon){
+function searchPokemon(pokemon) {
     $.ajax(url + pokemon).done(function (data, status) {
-        console.log("AJAX call completed successfully!");
-        console.log("Request status: " + status);
-        console.log("Data returned from server:");
-        console.log(data);
+        // console.log("AJAX call completed successfully!");
+        // console.log("Request status: " + status);
+        // console.log("Data returned from server:");
+        // console.log(data);
         // console.log(data.sprites)
-        console.log(data.types);
-        console.log(getTypes2(data.types));
-        console.log(data.abilities);
-        console.log(getAbilities2(data.abilities));
+        // console.log(data.types);
+        // console.log(getTypes2(data.types));
+        // console.log(data.abilities);
+        // console.log(getAbilities2(data.abilities));
 
         $('#output-container').html(dataToDiv2(data));
     });
 }
 
 //get data on 1 pokemon using fetch but there are issues when looping due to promises =>
-function fetchPokemon(pokemon){
+function fetchPokemon(pokemon) {
     fetch(url + pokemon)
         .then((response) => response.json())
         .then((data) => {
@@ -29,10 +29,9 @@ function fetchPokemon(pokemon){
             $('#output-container').html(dataToDiv(data));
         });
 }
-// fetchPokemon();
 
 //get all pokemon =>
-function getAllPokemon(){
+function getAllPokemon() {
     $.ajax(url2 + '?limit=2000&offset=0').done(function (data, status) {
         console.log("AJAX call completed successfully!");
         console.log("Request status: " + status);
@@ -40,14 +39,12 @@ function getAllPokemon(){
         console.log(data);
 
         //// loop thru all pokemon data =>
-        data.results.forEach(pokemon =>
-            // console.log(pokemon.url)
+        data.results.forEach(pokemon => // console.log(pokemon.url)
             $.ajax(url + pokemon.name).done(function (pokemon) {
 
                 $('#output-container').append(dataToDiv(pokemon));
-                console.log(pokemon);
-            })
-        );
+                // console.log(pokemon);
+            }));
 
     }).fail(function (status, error) {
         alert("There was an error! Check the console for details");
@@ -57,9 +54,8 @@ function getAllPokemon(){
         // alert("Gotta catch 'em all!");
     });
 }
-// getAllPokemon();
 
-//WIP: format data to form for db =>
+//WIP: format data to form for db (currently not needed) =>
 function pokemonToForm(pokemon) {
     $.ajax(url + pokemon).done(function (data) {
         // const pokemon = {
@@ -88,9 +84,10 @@ $("#search-input").keyup(function (e) {
     searchPokemon(pokemon);
 });
 
-function clearSearch(){
-    $("#search-input").val("");
-}
+////clear search bar value =>
+// function clearSearch() {
+//     $("#search-input").val("");
+// }
 
 //clear output container =>
 function clearPokemon() {
@@ -98,7 +95,7 @@ function clearPokemon() {
 }
 
 //clear favorite output container =>
-function clearPokemon2(){
+function clearPokemon2() {
     $("#favorites").html("");
 }
 
@@ -121,105 +118,62 @@ $("#search-btn").click(function (e) {
 // });
 
 //redirect to singular view from db on click =>
-function viewPokemon(pokemon){
+function viewPokemon(pokemon) {
     // alert(pokemon);
     window.location.href = "/pokemon/" + pokemon;
 }
 
 //single view of pokemon on click =>
-function viewPokemon2(pokemon){
-    // alert(pokemon);
+function viewPokemon2(pokemon) {
     clearPokemon();
-    clearPokemon2();
-    // clearSearch();
     getPokemon2(pokemon);
+
+    // clearSearch();
+    // window.location = "?search=" + pokemon;
 }
 
+
+///////////////////// WIP =>
+
+function viewPokemonTest() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams2 = urlParams.get('search');
+
+    getPokemon2(urlParams2);
+}
+
+function reloadAndView(pokemon) {
+    // location.reload();
+    // window.location = "?search=" + pokemon;
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('search');
+}
+
+///////////////////// <= WIP
+
+
 //single view of pokemon sprites on click =>
-function viewPokemon3(pokemon){
+function viewPokemon3(pokemon) {
     // alert(pokemon);
     clearPokemon();
     // clearSearch();
     getPokemon3(pokemon);
 }
 
-//get all pokemon on click =>
-$("#view-all-pokemon").click(function () {
-    clearPokemon();
-    getAllPokemon();
-});
-
-//get all Kanto pokemon on click =>
-$("#view-kanto-pokemon").click(function () {
-    clearPokemon();
-    getKantoPokemon();
-});
-
-//get all Johto pokemon on click =>
-$("#view-johto-pokemon").click(function () {
-    clearPokemon();
-    getJohtoPokemon();
-});
-
-//get all Hoenn pokemon on click =>
-$("#view-hoenn-pokemon").click(function () {
-    clearPokemon();
-    getHoennPokemon();
-});
-
-//get all Sinnoh pokemon on click =>
-$("#view-sinnoh-pokemon").click(function () {
-    clearPokemon();
-    getSinnohPokemon();
-});
-
-//get all Unova pokemon on click =>
-$("#view-unova-pokemon").click(function () {
-    clearPokemon();
-    getUnovaPokemon();
-});
-
-//get all Kalos pokemon on click =>
-$("#view-kalos-pokemon").click(function () {
-    clearPokemon();
-    getKalosPokemon();
-});
-
-//get all Alola pokemon on click =>
-$("#view-alola-pokemon").click(function () {
-    clearPokemon();
-    getAlolaPokemon();
-});
-
-//get all Galar pokemon on click =>
-$("#view-galar-pokemon").click(function () {
-    clearPokemon();
-    getGalarPokemon();
-});
-
-//get all Hisui pokemon on click =>
-$("#view-hisui-pokemon").click(function () {
-    clearPokemon();
-    getHisuiPokemon();
-});
-
 // get more data on 1 pokemon on main page =>
-function getPokemon2(pokemon){
-    $.ajax(url + pokemon).done(function(data) {
-        console.log(data);
-        console.log(data.id);
-        console.log(data.name);
+function getPokemon2(pokemon) {
+    $.ajax(url + pokemon).done(function (data) {
+        // console.log(data);
+        // console.log(data.id);
+        // console.log(data.name);
 
         $('#output-container').append(dataToDiv2(data));
     });
 }
 
-// get sprite data on 1 pokemon on click after using getPokemon2=>
-function getPokemon3(pokemon){
-    $.ajax(url + pokemon).done(function(data) {
-        console.log(data);
-        console.log(data.id);
-        console.log(data.name);
+// get sprite data on 1 pokemon on click after using getPokemon2 =>
+function getPokemon3(pokemon) {
+    $.ajax(url + pokemon).done(function (data) {
 
         $('#output-container').append(dataToDiv3(data));
     });
@@ -227,86 +181,14 @@ function getPokemon3(pokemon){
 
 // this fn is used by methods based on region:
 // get data on 1 pokemon =>
-function getPokemon(pokemon){
-    $.ajax(url + pokemon).done(function(data) {
+function getPokemon(pokemon) {
+    $.ajax(url + pokemon).done(function (data) {
         // console.log(data);
         // console.log(data.id);
         // console.log(data.name);
 
         $('#output-container').append(dataToDiv(data));
     });
-}
-
-//loop through gen 1 Kanto pokemon by id =>
-function getKantoPokemon() {
-    clearPokemon();
-    for (let i = 0; i <= 151; i++) {
-        getPokemon(i);
-    }
-}
-
-//loop through gen 2 Johto pokemon by id =>
-function getJohtoPokemon() {
-    clearPokemon();
-    for (let i = 152; i <= 251; i++) {
-        getPokemon(i);
-    }
-}
-
-//loop through gen 3 Hoenn pokemon by id =>
-function getHoennPokemon() {
-    clearPokemon();
-    for (let i = 252; i <= 386; i++) {
-        getPokemon(i);
-    }
-}
-
-//loop through gen 4 Sinnoh pokemon by id =>
-function getSinnohPokemon() {
-    clearPokemon();
-    for (let i = 387; i <= 493; i++) {
-        getPokemon(i);
-    }
-}
-
-//loop through gen 5 Unova pokemon by id =>
-function getUnovaPokemon() {
-    clearPokemon();
-    for (let i = 494; i <= 649; i++) {
-        getPokemon(i);
-    }
-}
-
-//loop through gen 6 Kalos pokemon by id =>
-function getKalosPokemon() {
-    clearPokemon();
-    for (let i = 650; i <= 721; i++) {
-        getPokemon(i);
-    }
-}
-
-//loop through gen 7 Alolan pokemon by id =>
-function getAlolaPokemon() {
-    clearPokemon();
-    for (let i = 722; i <= 809; i++) {
-        getPokemon(i);
-    }
-}
-
-//loop through gen 8 Galarian pokemon by id =>
-function getGalarPokemon() {
-    clearPokemon();
-    for (let i = 810; i <= 898; i++) {
-        getPokemon(i);
-    }
-}
-
-//loop through Husian pokemon by id =>
-function getHisuiPokemon() {
-    clearPokemon();
-    for (let i = 900; i <= 905; i++) {
-        getPokemon(i);
-    }
 }
 
 //output pokemon data to html view =>
@@ -320,40 +202,41 @@ const dataToDiv = (pokemon) => `<div id="pokemon${pokemon.id}" class="main-pokem
 
 //output pokemon data to html view =>
 const dataToDiv2 = (pokemon) => `<form action="/pokemon/save" method="POST">
-
-    <div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto my-auto px-2 py-2">
-        <div class="content pokemon-number">No. ${pokemon.id}</div>
-        <div class="content view-pokemon-name">${getName(pokemon)}</div>
-        <div class="content pokemon-number" onclick="viewPokemon3('${pokemon.name}')">(Click to view game sprites)</div>
-        <div class="content mb-1" onclick="viewPokemon3('${pokemon.name}')"><img src="${getPic(pokemon)}" alt="pokemon-official-artwork" class="view-pokemon-img"></div>
-        <div class="content">Type: ${getTypes(pokemon.types)}</div>
-        <div class="content">Ability: ${getAbilities(pokemon.abilities)}</div>
-        <div class="content">Height: ${convertHeight(pokemon)}</div>
-        <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>
-        
-        <input type="hidden" name="id" value="${pokemon.id}"/>
-        <input type="hidden" name="name" value="${pokemon.name}"/>
-        <input type="hidden" name="official-art" value="${getPic(pokemon)}"/>
-        <input type="hidden" name="sprite" value="${getSprite(pokemon)}"/>
-        <input type="hidden" name="sprite-shiny" value="${getShinySprite(pokemon)}"/>
-        <input type="hidden" name="types" value="${getTypes2(pokemon.types)}"/>
-        <input type="hidden" name="abilities" value="${getAbilities2(pokemon.abilities)}"/>
-        <input type="hidden" name="height" value="${pokemon.height}">  
-        <input type="hidden" name="weight" value="${pokemon.weight}">
-        
-        <div class="content mt-2">
-            <button type="submit" class="btn btn-success">Favorite</button>
+    
+        <div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto my-auto px-2 py-2" onclick="viewPokemon3('${pokemon.name}')">
+            <div class="content pokemon-number">No. ${pokemon.id}</div>
+            <div class="content view-pokemon-name">${getName(pokemon)}</div>
+            <div class="content pokemon-number" >(Click to view game sprites)</div>
+            <div class="content mb-1"><img src="${getPic(pokemon)}" alt="pokemon-official-artwork" class="view-pokemon-img"></div>
+            <div class="content">Type: ${getTypes(pokemon.types)}</div>
+            <div class="content">Ability: ${getAbilities(pokemon.abilities)}</div>
+            <div class="content">Height: ${convertHeight(pokemon)}</div>
+            <div class="content">Weight: ${convertWeight(pokemon)} lbs</div>
+            
+            <input type="hidden" name="id" value="${pokemon.id}"/>
+            <input type="hidden" name="name" value="${pokemon.name}"/>
+            <input type="hidden" name="official-art" value="${getPic(pokemon)}"/>
+            <input type="hidden" name="sprite" value="${getSprite(pokemon)}"/>
+            <input type="hidden" name="sprite-shiny" value="${getShinySprite(pokemon)}"/>
+            <input type="hidden" name="types" value="${getTypes2(pokemon.types)}"/>
+            <input type="hidden" name="abilities" value="${getAbilities2(pokemon.abilities)}"/>
+            <input type="hidden" name="height" value="${pokemon.height}">  
+            <input type="hidden" name="weight" value="${pokemon.weight}">
+            
+            <div class="content mt-2">
+                <button type="submit" class="btn btn-success">Favorite</button>
+            </div>
+            
         </div>
-        
-    </div>
-</form>`;
+    </form>`;
 
 //output game sprites to view =>
 const dataToDiv3 = (pokemon) => `<form th:action="" th:method="POST">
 
-        <div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto my-auto px-2 py-2" onclick="viewPokemon2('${pokemon.id}')">
+        <div id="pokemon${pokemon.id}" class="view-pokemon-card mx-auto my-auto px-2 py-2" onclick="viewPokemon2('${pokemon.name}')">
             <div class="content pokemon-number">No. ${pokemon.id}</div>
             <div class="content view-pokemon-name">${getName(pokemon)}</div>
+            
             <div class="content">
                 <img src="${getSprite(pokemon)}" alt="pokemon-sprite" class="main-pokemon-img">
                 <img src="${getSprite2(pokemon)}" alt="pokemon" class="main-pokemon-img">
@@ -362,7 +245,7 @@ const dataToDiv3 = (pokemon) => `<form th:action="" th:method="POST">
                 <img src="${getShinySprite(pokemon)}" alt="pokemon-sprite" class="main-pokemon-img">
                 <img src="${getShinySprite2(pokemon)}" alt="pokemon-sprite" class="main-pokemon-img">
             </div>  
-        
+            
         </div>
     </form>`;
 
@@ -386,13 +269,11 @@ function getName(pokemon) {
     }
     if (pokemon.name.includes("mega")) {
         let hyphen = pokemon.name.indexOf("-");
-        return pokemon.name.charAt(hyphen + 1).toUpperCase() + pokemon.name.slice(hyphen + 2)
-            + " " + pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1, hyphen);
+        return pokemon.name.charAt(hyphen + 1).toUpperCase() + pokemon.name.slice(hyphen + 2) + " " + pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1, hyphen);
     }
-    if (pokemon.name.includes("gmax")){
+    if (pokemon.name.includes("gmax")) {
         let hyphen = pokemon.name.indexOf("-");
-        return "G-Max"
-            + " " + pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1, hyphen);
+        return "G-Max" + " " + pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1, hyphen);
     }
     if (pokemon.name.includes("mr-mime")) {
         return "Mr. Mime";
@@ -413,7 +294,7 @@ function getPic(pokemon) {
     if (pokemon.sprites.other["official-artwork"].front_default === null) {
         return "https://www.seekpng.com/png/detail/13-137344_pokeball-pokeball-png.png";
     } else {
-       return pokemon.sprites.other["official-artwork"].front_default;
+        return pokemon.sprites.other["official-artwork"].front_default;
     }
 }
 
@@ -458,18 +339,17 @@ function getShinySprite2(pokemon) {
 
 //format typing of pokemon based on size of array =>
 function getTypes(arr) {
-    if (arr.length > 1){
-        return arr[0].type.name.charAt(0).toUpperCase() + arr[0].type.name.slice(1)
-            + "/" + arr[1].type.name.charAt(0).toUpperCase() + arr[1].type.name.slice(1);
+    if (arr.length > 1) {
+        return arr[0].type.name.charAt(0).toUpperCase() + arr[0].type.name.slice(1) + "/" + arr[1].type.name.charAt(0).toUpperCase() + arr[1].type.name.slice(1);
     } else {
         return arr[0].type.name.charAt(0).toUpperCase() + arr[0].type.name.slice(1)
     }
 }
 
 //get only type names from array =>
-function getTypes2(arr){
-    let types =[];
-    for (let i = 0; i < arr.length; i++){
+function getTypes2(arr) {
+    let types = [];
+    for (let i = 0; i < arr.length; i++) {
         types.push(arr[i].type.name);
     }
     return types;
@@ -477,14 +357,11 @@ function getTypes2(arr){
 
 //format abilities of a pokemon based on size of array =>
 function getAbilities(arr) {
-    if (arr.length === 3){
-        return arr[0].ability.name.charAt(0).toUpperCase() + arr[0].ability.name.slice(1)
-            + "/" + arr[1].ability.name.charAt(0).toUpperCase() + arr[1].ability.name.slice(1)
-            + "/" + arr[2].ability.name.charAt(0).toUpperCase() + arr[2].ability.name.slice(1);
-    } else  if (arr.length === 2) {
-        return arr[0].ability.name.charAt(0).toUpperCase() + arr[0].ability.name.slice(1)
-            + "/" + arr[1].ability.name.charAt(0).toUpperCase() + arr[1].ability.name.slice(1)
-    } else if (arr.length === 1){
+    if (arr.length === 3) {
+        return arr[0].ability.name.charAt(0).toUpperCase() + arr[0].ability.name.slice(1) + "/" + arr[1].ability.name.charAt(0).toUpperCase() + arr[1].ability.name.slice(1) + "/" + arr[2].ability.name.charAt(0).toUpperCase() + arr[2].ability.name.slice(1);
+    } else if (arr.length === 2) {
+        return arr[0].ability.name.charAt(0).toUpperCase() + arr[0].ability.name.slice(1) + "/" + arr[1].ability.name.charAt(0).toUpperCase() + arr[1].ability.name.slice(1)
+    } else if (arr.length === 1) {
         return arr[0].ability.name.charAt(0).toUpperCase() + arr[0].ability.name.slice(1);
     } else {
         return "N/A";
@@ -534,10 +411,81 @@ function convertHeight(pokemon) {
     }
 }
 
-function redirectToMain(pokemon){
+//loop through pokemon by region using id's =>
+function getPokemonByRegion(start, end) {
+    clearPokemon();
+    for (let i = start; i <= end; i++) {
+        getPokemon(i);
+    }
+}
+
+//get all pokemon on click =>
+$("#view-all-pokemon").click(function () {
+    clearPokemon();
+    getAllPokemon();
+});
+
+//get all Kanto pokemon on click =>
+$("#view-kanto-pokemon").click(function () {
+    clearPokemon();
+    getPokemonByRegion(1, 151);
+});
+
+//get all Johto pokemon on click =>
+$("#view-johto-pokemon").click(function () {
+    clearPokemon();
+    getPokemonByRegion(152, 251);
+});
+
+//get all Hoenn pokemon on click =>
+$("#view-hoenn-pokemon").click(function () {
+    clearPokemon();
+    getPokemonByRegion(252, 386);
+});
+
+//get all Sinnoh pokemon on click =>
+$("#view-sinnoh-pokemon").click(function () {
+    clearPokemon();
+    getPokemonByRegion(387, 493);
+});
+
+//get all Unova pokemon on click =>
+$("#view-unova-pokemon").click(function () {
+    clearPokemon();
+    getPokemonByRegion(494, 649)
+});
+
+//get all Kalos pokemon on click =>
+$("#view-kalos-pokemon").click(function () {
+    clearPokemon();
+    getPokemonByRegion(650, 721)
+});
+
+//get all Alola pokemon on click =>
+$("#view-alola-pokemon").click(function () {
+    clearPokemon();
+    getPokemonByRegion(722, 809)
+});
+
+//get all Galar pokemon on click =>
+$("#view-galar-pokemon").click(function () {
+    clearPokemon();
+    getPokemonByRegion(810, 898)
+});
+
+//get all Hisui pokemon on click =>
+$("#view-hisui-pokemon").click(function () {
+    clearPokemon();
+    getPokemonByRegion(899, 905);
+});
+
+//redirect view to main page =>
+function redirectToMain(pokemon) {
     window.location = "/";
     // setTimeout(function () {
     //     viewPokemon2(pokemon)}, 5000);
 }
 
-
+// $('.content').click(function () {
+//     alert("hi");
+// })
